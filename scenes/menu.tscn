@@ -1,0 +1,145 @@
+[gd_scene load_steps=7 format=3 uid="uid://cjnxsyfpslufq"]
+
+[ext_resource type="PackedScene" uid="uid://bb4vriqs8koif" path="res://scenes/effects.tscn" id="1_con2f"]
+[ext_resource type="PackedScene" uid="uid://e3lkvta0rwwl" path="res://scenes/bg.tscn" id="1_yqeox"]
+[ext_resource type="Script" uid="uid://bgaw65pmi0hmv" path="res://scripts/menuUI.gd" id="3_4ytvr"]
+[ext_resource type="FontFile" uid="uid://d37jpsgvq5ukx" path="res://textures/PixelatedEleganceRegular-ovawB.ttf" id="3_mhnvy"]
+[ext_resource type="Texture2D" uid="uid://dwut8j5b8k6b2" path="res://textures/PS4_ICON18.png" id="5_g3eks"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ytvr"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0.50980395)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 5
+
+[node name="menu" type="Node2D"]
+
+[node name="effects" parent="." instance=ExtResource("1_con2f")]
+
+[node name="cam" type="Camera2D" parent="."]
+
+[node name="bg" parent="." instance=ExtResource("1_yqeox")]
+
+[node name="uimenu" type="CanvasLayer" parent="." node_paths=PackedStringArray("bginthisscene")]
+script = ExtResource("3_4ytvr")
+bginthisscene = NodePath("../bg")
+
+[node name="title" type="Label" parent="uimenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -389.0
+offset_top = -236.0
+offset_right = 389.0
+offset_bottom = -143.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 103
+text = "Cascade"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="play" type="Button" parent="uimenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = -15.5
+offset_right = 20.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 32
+text = "Play"
+
+[node name="ps4iconX" type="Sprite2D" parent="uimenu/play"]
+visible = false
+position = Vector2(119, 18.5)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("5_g3eks")
+
+[node name="exit" type="Button" parent="uimenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = 39.0
+offset_right = 50.0
+offset_bottom = 76.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 32
+text = "Exit"
+
+[node name="ps4iconX" type="Sprite2D" parent="uimenu/exit"]
+visible = false
+position = Vector2(127, 19)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("5_g3eks")
+
+[node name="credittext" type="Label" parent="uimenu"]
+modulate = Color(1, 1, 1, 0.59607846)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = -19.0
+offset_right = 409.0
+offset_bottom = -7.0
+grow_vertical = 0
+mouse_filter = 0
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 12
+text = "Hover here for credits..."
+vertical_alignment = 1
+
+[node name="creditpanel" type="Panel" parent="uimenu"]
+offset_left = 8.0
+offset_top = 423.0
+offset_right = 208.0
+offset_bottom = 623.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4ytvr")
+
+[node name="credits" type="Label" parent="uimenu/creditpanel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -194.0
+offset_right = 198.0
+offset_bottom = -3.0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 11
+text = "Programming: Me
+Music: (Will be me)
+SFX: Created on sfxr.me
+Shaders: 
+https://godotshaders.com
+jecovier
+VEGAMETA
+
+Font:
+fontspace.com
+(Pixelated Elegance)"
+
+[connection signal="pressed" from="uimenu/play" to="uimenu" method="_on_button_pressed"]
+[connection signal="pressed" from="uimenu/exit" to="uimenu" method="_on_exit_pressed"]
+[connection signal="mouse_entered" from="uimenu/credittext" to="uimenu" method="credshow"]
+[connection signal="mouse_exited" from="uimenu/credittext" to="uimenu" method="credhide"]

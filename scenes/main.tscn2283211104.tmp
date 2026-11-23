@@ -1,0 +1,207 @@
+[gd_scene load_steps=26 format=3 uid="uid://bwy770u2xxemf"]
+
+[ext_resource type="Script" uid="uid://cyquit5jkh1s5" path="res://scripts/Globals.gd" id="1_tefeu"]
+[ext_resource type="Shader" uid="uid://bipv6u2brqnyy" path="res://scripts/postprocessing.gdshader" id="2_choun"]
+[ext_resource type="Texture2D" uid="uid://b4pfnfeslgvx" path="res://textures/ball.png" id="2_jyhfs"]
+[ext_resource type="Texture2D" uid="uid://me1iwxf8olit" path="res://textures/square.png" id="3_sugp2"]
+[ext_resource type="Script" uid="uid://c634ti26wkswr" path="res://scripts/target.gd" id="4_o6xl0"]
+[ext_resource type="Script" uid="uid://hyty8q23rpl7" path="res://scripts/shooter.gd" id="4_tipki"]
+[ext_resource type="Script" uid="uid://llq68ljyogp7" path="res://scripts/cam.gd" id="5_tefeu"]
+[ext_resource type="FontFile" uid="uid://d37jpsgvq5ukx" path="res://textures/PixelatedEleganceRegular-ovawB.ttf" id="9_85g3d"]
+[ext_resource type="Script" uid="uid://d0mhpcdwejpgj" path="res://scripts/ui.gd" id="9_choun"]
+[ext_resource type="Shader" uid="uid://ccnk7f6edjqdn" path="res://scripts/bg.gdshader" id="11_ya4ey"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tefeu"]
+shader = ExtResource("2_choun")
+shader_parameter/r_displacement = Vector2(1, 0)
+shader_parameter/g_displacement = Vector2(0, 0)
+shader_parameter/b_displacement = Vector2(-1, 0)
+shader_parameter/aura_size = 7.0000003325
+shader_parameter/aura_intensity = 0.6
+shader_parameter/aura_tint = Color(1, 1, 1, 1)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_tipki"]
+bounce = 0.5
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_o6xl0"]
+radius = 10.67
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tipki"]
+radius = 8.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_85g3d"]
+radius = 12.4
+
+[sub_resource type="Gradient" id="Gradient_tipki"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_85g3d"]
+gradient = SubResource("Gradient_tipki")
+width = 4
+height = 4
+
+[sub_resource type="Curve" id="Curve_choun"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.7674419, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_ya4ey"]
+_limits = [0.0, 200.0, 0.0, 1.0]
+_data = [Vector2(0.010869563, 200), 0.0, 0.0, 0, 0, Vector2(0.7880435, 94.38202), 0.0, 0.0, 0, 0, Vector2(1, 0), -1405.8446, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_85g3d"]
+bounce = 0.7
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ya4ey"]
+frequency = 0.1244
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_eb6dy"]
+width = 258
+height = 3000
+noise = SubResource("FastNoiseLite_ya4ey")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sugp2"]
+size = Vector2(165, 3000)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tipki"]
+size = Vector2(3058, 140)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eb6dy"]
+shader = ExtResource("11_ya4ey")
+shader_parameter/speed = 0.27600000985011997
+shader_parameter/color1 = Color(0.05, 0.02, 0.15, 0.5)
+shader_parameter/color2 = Color(0.2, 0.05, 0.4, 0.5)
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_tefeu")
+
+[node name="effects" type="CanvasLayer" parent="."]
+layer = 1000
+
+[node name="effect" type="ColorRect" parent="effects"]
+material = SubResource("ShaderMaterial_tefeu")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="shooter" type="RigidBody2D" parent="."]
+position = Vector2(-521, 0)
+physics_material_override = SubResource("PhysicsMaterial_tipki")
+gravity_scale = 0.5
+freeze = true
+script = ExtResource("4_tipki")
+shootSpeed = 1000.0
+sizedecay = 0.5
+
+[node name="ballSprite" type="Sprite2D" parent="shooter"]
+scale = Vector2(0.084, 0.084)
+texture = ExtResource("2_jyhfs")
+
+[node name="shootercol" type="CollisionShape2D" parent="shooter"]
+shape = SubResource("CircleShape2D_o6xl0")
+disabled = true
+
+[node name="path" type="Line2D" parent="shooter"]
+
+[node name="targetBall" type="RigidBody2D" parent="." node_paths=PackedStringArray("cam", "ui", "bg")]
+gravity_scale = 0.0
+script = ExtResource("4_o6xl0")
+hitTrauma = 0.2
+leftmost = -200
+rightmost = 444
+upmost = -300
+downmost = 240
+cam = NodePath("../cam")
+ui = NodePath("../ui")
+bg = NodePath("../bg/bg")
+
+[node name="ballSprite" type="Sprite2D" parent="targetBall"]
+modulate = Color(1, 0.38807395, 0.31868142, 1)
+scale = Vector2(0.063, 0.063)
+texture = ExtResource("2_jyhfs")
+
+[node name="targetcol" type="CollisionShape2D" parent="targetBall"]
+shape = SubResource("CircleShape2D_tipki")
+
+[node name="hitarea" type="Area2D" parent="targetBall"]
+
+[node name="hitcol" type="CollisionShape2D" parent="targetBall/hitarea"]
+shape = SubResource("CircleShape2D_85g3d")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="part" type="CPUParticles2D" parent="targetBall"]
+modulate = Color(1, 0.3882353, 0.31764707, 1)
+emitting = false
+amount = 32
+texture = SubResource("GradientTexture2D_85g3d")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+lifetime_randomness = 1.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+scale_amount_curve = SubResource("Curve_choun")
+anim_speed_curve = SubResource("Curve_ya4ey")
+
+[node name="cam" type="Camera2D" parent="."]
+script = ExtResource("5_tefeu")
+
+[node name="wall" type="StaticBody2D" parent="."]
+position = Vector2(556, 403)
+physics_material_override = SubResource("PhysicsMaterial_85g3d")
+
+[node name="wallTexture" type="Sprite2D" parent="wall"]
+visible = false
+modulate = Color(0.3019608, 0.3019608, 0.3019608, 1)
+position = Vector2(0, -19)
+scale = Vector2(0.64, 12.6)
+texture = ExtResource("3_sugp2")
+
+[node name="wallTexture2" type="Sprite2D" parent="wall"]
+modulate = Color(0.11119685, 0.11119684, 0.11119684, 1)
+position = Vector2(0, -19)
+scale = Vector2(0.64, 1)
+texture = SubResource("NoiseTexture2D_eb6dy")
+
+[node name="wallCol" type="CollisionShape2D" parent="wall"]
+position = Vector2(0, -18.5)
+shape = SubResource("RectangleShape2D_sugp2")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="kill" type="Area2D" parent="."]
+position = Vector2(0, 511)
+
+[node name="kill" type="CollisionShape2D" parent="kill"]
+position = Vector2(-565, 60)
+shape = SubResource("RectangleShape2D_tipki")
+
+[node name="ui" type="CanvasLayer" parent="."]
+script = ExtResource("9_choun")
+
+[node name="scoreText" type="Label" parent="ui"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 108.0
+offset_bottom = 31.0
+theme_override_fonts/font = ExtResource("9_85g3d")
+theme_override_font_sizes/font_size = 20
+text = "Score: 0"
+
+[node name="bg" type="CanvasLayer" parent="."]
+layer = -9999
+
+[node name="bg" type="ColorRect" parent="bg"]
+material = SubResource("ShaderMaterial_eb6dy")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="body_entered" from="targetBall/hitarea" to="targetBall" method="_on_hitarea_body_entered"]
+[connection signal="body_entered" from="kill" to="shooter" method="_on_kill_body_entered"]

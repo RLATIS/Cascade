@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://bb4vriqs8koif"]
+
+[ext_resource type="Shader" uid="uid://bipv6u2brqnyy" path="res://scripts/postprocessing.gdshader" id="1_n2mv2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tefeu"]
+shader = ExtResource("1_n2mv2")
+shader_parameter/r_displacement = Vector2(1, 0)
+shader_parameter/g_displacement = Vector2(0, 0)
+shader_parameter/b_displacement = Vector2(-1, 0)
+shader_parameter/aura_size = 7.0000003325
+shader_parameter/aura_intensity = 0.6
+shader_parameter/aura_tint = Color(1, 1, 1, 1)
+
+[node name="effects" type="CanvasLayer"]
+layer = 1000
+
+[node name="effect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_tefeu")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

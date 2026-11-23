@@ -2,14 +2,21 @@ extends CanvasLayer
 
 @export var bginthisscene : CanvasLayer
 var usingcontroller := false
+var credittween: Tween
 
 func _ready() -> void:
 	usingcontroller = Globals.onController
 	
 	for c in get_children():
-		c.modulate = Color('ffffff00')
-		var tween = create_tween()
-		tween.tween_property(c, "modulate", Color('ffffff'), 2.0)
+		if c == $creditpanel or c.is_ancestor_of($creditpanel):
+			continue
+		if c is CanvasItem:
+			c.modulate = Color('ffffff00')
+			var tween = create_tween()
+			tween.tween_property(c, "modulate", Color('ffffff'), 2.0)
+	
+	$creditpanel.modulate = Color('ffffff00')
+	$creditpanel.visible = true
 	
 	$play.focus_mode = Control.FOCUS_ALL
 	$exit.focus_mode = Control.FOCUS_ALL
@@ -53,7 +60,6 @@ func _update_icons() -> void:
 	for btn in [$play, $exit]:
 		btn.get_node("ps4iconX").visible = (usingcontroller and btn == focused)
 
-
 func fadeouteverything(node: Node, time=0.5) -> void:
 	if 'bg' in node.name:
 		return
@@ -86,3 +92,15 @@ func _on_button_pressed() -> void: # play
 
 func _on_exit_pressed() -> void:
 	get_tree().quit()
+
+func credshow() -> void:
+	if credittween:
+		credittween.kill()
+	credittween = create_tween()
+	credittween.tween_property($creditpanel, 'modulate', Color('ffffff'), 0.5)
+
+func credhide() -> void:
+	if credittween:
+		credittween.kill()
+	credittween = create_tween()
+	credittween.tween_property($creditpanel, 'modulate', Color('ffffff00'), 0.5)

@@ -1,10 +1,22 @@
-[gd_scene load_steps=6 format=3 uid="uid://cjnxsyfpslufq"]
+[gd_scene load_steps=7 format=3 uid="uid://cjnxsyfpslufq"]
 
 [ext_resource type="PackedScene" uid="uid://bb4vriqs8koif" path="res://scenes/effects.tscn" id="1_con2f"]
 [ext_resource type="PackedScene" uid="uid://e3lkvta0rwwl" path="res://scenes/bg.tscn" id="1_yqeox"]
 [ext_resource type="Script" uid="uid://bgaw65pmi0hmv" path="res://scripts/menuUI.gd" id="3_4ytvr"]
 [ext_resource type="FontFile" uid="uid://d37jpsgvq5ukx" path="res://textures/PixelatedEleganceRegular-ovawB.ttf" id="3_mhnvy"]
 [ext_resource type="Texture2D" uid="uid://dwut8j5b8k6b2" path="res://textures/PS4_ICON18.png" id="5_g3eks"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ytvr"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0.50980395)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 5
 
 [node name="menu" type="Node2D"]
 
@@ -80,5 +92,54 @@ position = Vector2(127, 19)
 scale = Vector2(1.6, 1.6)
 texture = ExtResource("5_g3eks")
 
+[node name="credittext" type="Label" parent="uimenu"]
+modulate = Color(1, 1, 1, 0.59607846)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = -19.0
+offset_right = 409.0
+offset_bottom = -7.0
+grow_vertical = 0
+mouse_filter = 0
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 12
+text = "Hover here for credits..."
+vertical_alignment = 1
+
+[node name="creditpanel" type="Panel" parent="uimenu"]
+offset_left = 8.0
+offset_top = 423.0
+offset_right = 208.0
+offset_bottom = 623.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4ytvr")
+
+[node name="credits" type="Label" parent="uimenu/creditpanel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -194.0
+offset_right = 198.0
+offset_bottom = -3.0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 11
+text = "Programming: Me
+Music: (Will be me)
+SFX: Created on sfxr.me
+Shaders: 
+https://godotshaders.com
+jecovier
+VEGAMETA
+
+Font:
+fontspace.com
+(Pixelated Elegance)"
+
 [connection signal="pressed" from="uimenu/play" to="uimenu" method="_on_button_pressed"]
 [connection signal="pressed" from="uimenu/exit" to="uimenu" method="_on_exit_pressed"]
+[connection signal="mouse_entered" from="uimenu/credittext" to="uimenu" method="credshow"]
+[connection signal="mouse_exited" from="uimenu/credittext" to="uimenu" method="credhide"]

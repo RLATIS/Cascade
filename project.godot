@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="bounceback"
-run/main_scene="uid://bwxqm01ai2vuw"
+run/main_scene="uid://cjnxsyfpslufq"
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/image="uid://cog4wu0hsfjm5"
 config/icon="res://textures/icon.svg"

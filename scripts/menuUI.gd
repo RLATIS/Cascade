@@ -100,6 +100,8 @@ func _on_button_pressed() -> void: # play
 	self.visible = false
 	playmenu.visible = true
 	
+	playmenu.get_node('medium').grab_focus()
+	
 	for m in playmenu.get_children():
 		if m is CanvasItem:
 			m.self_modulate = Color.WHITE # reset selfmodulate or die
@@ -107,7 +109,8 @@ func _on_button_pressed() -> void: # play
 			var mt = create_tween()
 			mt.tween_property(m, 'modulate', Color('ffffff'), 0.5)
 
-	await get_tree().create_timer(0.7).timeout
+	await get_tree().create_timer(0.5).timeout
+	
 	print('done loading playmenu')
 
 func _on_exit_pressed() -> void:

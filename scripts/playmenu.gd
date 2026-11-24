@@ -9,7 +9,37 @@ func updateall():
 func _ready() -> void:
 	$seedINPT.text = str(randi_range(1, 9999999))
 	_on_medium_pressed()
+
+	$easy.focus_mode = Control.FOCUS_ALL
+	$medium.focus_mode = Control.FOCUS_ALL
+	$hard.focus_mode = Control.FOCUS_ALL
+	$begin.focus_mode = Control.FOCUS_ALL
+
+	$easy.focus_neighbor_right = $medium.get_path()
+	$medium.focus_neighbor_right = $hard.get_path()
+	$hard.focus_neighbor_right = $easy.get_path()
+
+	$easy.focus_neighbor_left = $hard.get_path()
+	$medium.focus_neighbor_left = $easy.get_path()
+	$hard.focus_neighbor_left = $medium.get_path()
 	
+	$easy.focus_neighbor_bottom = $seedINPT.get_path()
+	$medium.focus_neighbor_bottom = $seedINPT.get_path()
+	$hard.focus_neighbor_bottom = $seedINPT.get_path()
+
+	$seedINPT.focus_neighbor_top = $medium.get_path()
+	
+	$seedINPT.focus_neighbor_bottom = $mqSLIDER.get_path()
+	$mqSLIDER.focus_neighbor_bottom = $tiSLIDER.get_path()
+	$tiSLIDER.focus_neighbor_bottom = $itSLIDER.get_path()
+	$itSLIDER.focus_neighbor_bottom = $begin.get_path()
+
+	$mqSLIDER.focus_neighbor_top = $seedINPT.get_path()
+	$tiSLIDER.focus_neighbor_top = $mqSLIDER.get_path()
+	$itSLIDER.focus_neighbor_top = $tiSLIDER.get_path()
+
+	$begin.focus_neighbor_top = $itSLIDER.get_path()
+
 func _on_mq_slider_value_changed(value: float) -> void:
 	var am = snappedf(remap(value, 0, 100, 1.1, 4), 0.05)
 	$mqAMOUNT.text = str(am) + 'x'

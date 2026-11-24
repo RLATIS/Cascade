@@ -26,6 +26,7 @@ var upgradesinit := {
 	# TARGETS
 	'+1 Target': { 'cost': 3, 'weight': 43 },
 	'+2 Targets': { 'cost': 5, 'weight': 15 },
+	'+3 Targets': { 'cost': 4, 'weight': 2 },
 	'-1 Target': { 'cost': -4, 'weight': 9 },
 	'Traffic (+3 Targets, +15% shooting cooldown)': { 'cost': 4, 'weight': 5 }, 
 	
@@ -110,6 +111,8 @@ func updateStats():
 			targets -= 1
 		elif up == '+2 Targets':
 			targets += 2
+		elif up == '+3 Targets':
+			targets += 3
 		
 		elif up == '+10 Score Per Target':
 			scorePerTarget += 10

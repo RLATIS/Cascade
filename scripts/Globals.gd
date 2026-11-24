@@ -21,11 +21,7 @@ var upgradesinit := {
 	'Overtime (+2.0s round, +15% cooldown)': { 'cost': 5, 'weight': 12 },
 	
 	'Trigger Finger (-25% cooldown, -2 Targets)': { 'cost': 5, 'weight': 8 }, 
-<<<<<<< HEAD
 	'Heavy (x3 Score, +25% cooldown)': { 'cost': 5, 'weight': 6 },
-=======
-	'Heavy (x3 Score, +35% cooldown)': { 'cost': 5, 'weight': 6 },
->>>>>>> 47fa7e27a2ef962764cf72290138af2f12ec72fa
 
 	# TARGETS
 	'+1 Target': { 'cost': 3, 'weight': 43 },
@@ -34,11 +30,7 @@ var upgradesinit := {
 	'Traffic (+3 Targets, +13% shooting cooldown)': { 'cost': 3, 'weight': 6 }, 
 	
 	# MULTIPLIERS
-<<<<<<< HEAD
 	'x2 Score Per Target': { 'cost': 5, 'weight': 6.5},
-=======
-	'x2 Score Per Target': { 'cost': 5, 'weight': 7},
->>>>>>> 47fa7e27a2ef962764cf72290138af2f12ec72fa
 	'x5 Score Per Target': { 'cost': 6, 'weight': 4},
 	'Coin Flip (x3 or ÷2 Score Per Target)': { 'cost': 4, 'weight': 7 },
 	'Greed (+1x SPT for each $10 held)': { 'cost': 5, 'weight': 4 },
@@ -152,15 +144,9 @@ func updateStats():
 			if cooldownspeed <= 0.3:
 				scorePerTarget *= 5
 				
-<<<<<<< HEAD
 		elif up == 'Heavy (x3 Score, +25% cooldown)':
 			scorePerTarget *= 3
 			cooldownspeed *= 1.25
-=======
-		elif up == 'Heavy (x3 Score, +35% cooldown)':
-			scorePerTarget *= 3
-			cooldownspeed *= 1.35
->>>>>>> 47fa7e27a2ef962764cf72290138af2f12ec72fa
 		
 		elif up == 'x2 Score Per Target':
 			scorePerTarget *= 2
@@ -257,10 +243,6 @@ func newgame() -> void:
 		statsLabel = ui.statsLabel # good because it is referenced inside ui
 
 	statsLabel.visible = false
-<<<<<<< HEAD
-=======
-	
->>>>>>> 47fa7e27a2ef962764cf72290138af2f12ec72fa
 
 	statsLabel.visible = false
 	updateStats()

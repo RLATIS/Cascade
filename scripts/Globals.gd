@@ -18,7 +18,7 @@ var upgradesinit := {
 	'Longer round length (+0.66s)': { 'cost': 3, 'weight': 25 },
 	'Rush (-0.66s round)': { 'cost': -5, 'weight': 6 },
 	
-	'Overtime (+2.0s round, +15% cooldown)': { 'cost': 5, 'weight': 12 },
+	'Overtime (+2.0s round, +10% cooldown)': { 'cost': 5, 'weight': 12 },
 	
 	'Trigger Finger (-25% cooldown, -2 Targets)': { 'cost': 5, 'weight': 8 }, 
 	'Heavy (x3 Score, +25% cooldown)': { 'cost': 5, 'weight': 6 },
@@ -33,18 +33,20 @@ var upgradesinit := {
 	'x2 Score Per Target': { 'cost': 5, 'weight': 6.5},
 	'x5 Score Per Target': { 'cost': 6, 'weight': 4},
 	
-	'+10 Score Per Target': { 'cost': 5, 'weight': 3},
+	'+10 Score Per Target': { 'cost': 6, 'weight': 3},
+	'+3 Score Per Target': { 'cost': 3, 'weight': 8.7},
 	
 	'Coin Flip (x4 or ÷2 Score Per Target)': { 'cost': 4, 'weight': 7 },
 	'Greed (+1x SPT for each $10 held)': { 'cost': 5, 'weight': 4 },
 	
 	# BUILD PAYOFFS
 	'Overheat (x6 Score if cooldown <= 0.35s)': { 'cost': 4, 'weight': 5 },
-	'Lonely (x10 Score if Targets <= 4)': { 'cost': 5, 'weight': 5 },
+	'Lonely (x7 Score if Targets <= 4)': { 'cost': 5, 'weight': 5 },
 	'Swarm (+1x SPT for each target)': { 'cost': 4, 'weight': 5 },
+	'Sniper (x8 Score if cooldown >= 1.0s)': { 'cost': 5, 'weight': 5},
 
 	# FREE MONEY
-	'Free Money! (+$10)': { 'cost': 0, 'weight': 3 },
+	'Free Money! (+$15)': { 'cost': 0, 'weight': 3 },
 	'Jackpot! (+$50)': { 'cost': 0, 'weight': 1 }
 }
 
@@ -111,6 +113,8 @@ func updateStats():
 		
 		elif up == '+10 Score Per Target':
 			scorePerTarget += 10
+		elif up == '+3 Score Per Target':
+			scorePerTarget += 3
 		
 		elif up.begins_with('Greed'):
 			scorePerTarget += 1 * floor(money / 10)
@@ -129,7 +133,7 @@ func updateStats():
 			
 		elif up.begins_with('Overtime'):
 			roundlength += 2
-			cooldownspeed *= 1.15
+			cooldownspeed *= 1.10
 			
 		elif up.begins_with('Trigger Finger'):
 			cooldownspeed *= 0.8
@@ -157,11 +161,14 @@ func updateStats():
 		if up == 'Overheat (x6 Score if cooldown <= 0.35s)':
 			if cooldownspeed <= 0.35:
 				scorePerTarget *= 6
+		elif up.begins_with('Sniper'):
+			if cooldownspeed >= 1.0:
+				scorePerTarget *= 8
 				
 		elif up.begins_with('Lonely'):
 			if targets <= 4:
-				scorePerTarget *= 10
-		
+				scorePerTarget *= 7
+	
 		elif up == 'Heavy (x3 Score, +25% cooldown)':
 			scorePerTarget *= 3
 			cooldownspeed *= 1.25
@@ -171,7 +178,7 @@ func updateStats():
 		elif up == 'x5 Score Per Target':
 			scorePerTarget *= 5
 		
-				
+		
 	cooldownspeed = snappedf(cooldownspeed, 0.01)
 	money = snappedf(money, 0.01)
 	

@@ -37,7 +37,7 @@ var upgradesinit := {
 	'+3 Score Per Target': { 'cost': 3, 'weight': 8.7},
 	
 	'Coin Flip (x4 or ÷2 Score Per Target)': { 'cost': 4, 'weight': 7 },
-	'Greed (+1x SPT for each $10 held)': { 'cost': 5, 'weight': 4 },
+	'Greed (+1x SPT for each $6 held)': { 'cost': 5, 'weight': 4 },
 	
 	# BUILD PAYOFFS
 	'Overheat (x6 Score if cooldown <= 0.35s)': { 'cost': 4, 'weight': 5 },
@@ -117,7 +117,7 @@ func updateStats():
 			scorePerTarget += 3
 		
 		elif up.begins_with('Greed'):
-			scorePerTarget += 1 * floor(money / 10)
+			scorePerTarget += 1 * floor(money / 6)
 		
 		elif up.begins_with('Traffic'):
 			targets += 3

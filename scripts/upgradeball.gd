@@ -60,7 +60,6 @@ func _ready() -> void:
 		upgradeLabel.text = upgrade
 		costLabel.text = '$' + str(cost)
 	
-	
 func particlespawn():
 	var p = particle.duplicate()
 	get_parent().add_child(p)
@@ -96,7 +95,8 @@ func spawnupgrades():
 		var c = self.duplicate()
 		c.position.x = 257
 		c.position.y = (i-1) * 190
-		c.rng.seed = rng.seed + i
+		rng.seed += i*10
+		c.rng.seed = rng.seed 
 		
 		c.name = 'REALUPGRADE' + str(i)
 		c.isMain = false

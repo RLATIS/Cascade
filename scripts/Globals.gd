@@ -220,8 +220,6 @@ func playsound(path: String, pitch: float = 1.0, volume: float = 0.0):
 	player.queue_free() # delete
 
 func newgame() -> void:
-	seed = randi_range(1, 100000000000)
-	
 	rng.seed = seed
 
 	upgrades = upgradesinit

@@ -7,13 +7,8 @@ func updateall():
 	_on_seed_inpt_text_changed($seedINPT.text)
 
 func _ready() -> void:
-	$mqSLIDER.value = 14 # 1.5x
-	$tiSLIDER.value = 76 # 15%
-	$itSLIDER.value = 6 # 7
-	
 	$seedINPT.text = str(randi_range(1, 9999999))
-	
-	updateall()
+	_on_medium_pressed()
 	
 func _on_mq_slider_value_changed(value: float) -> void:
 	var am = snappedf(remap(value, 0, 100, 1.1, 4), 0.05)
@@ -47,7 +42,7 @@ func _on_medium_pressed() -> void:
 	updateall()
 
 func _on_hard_pressed() -> void:
-	$mqSLIDER.value = 31 # 2x
+	$mqSLIDER.value = 22.5 # 1.75x
 	$tiSLIDER.value = 76 # 15%
 	$itSLIDER.value = 4 # 5
 	

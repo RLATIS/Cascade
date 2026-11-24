@@ -16,7 +16,7 @@ var upgradesinit := {
 	'Shorter shooting cooldown (-10%)': { 'cost': 2, 'weight': 35 },
 	
 	'Longer round length (+0.66s)': { 'cost': 3, 'weight': 25 },
-	'Rush (-0.66s round)': { 'cost': -4, 'weight': 6 },
+	'Rush (-0.66s round)': { 'cost': -5, 'weight': 6 },
 	
 	'Overtime (+2.0s round, +15% cooldown)': { 'cost': 5, 'weight': 12 },
 	
@@ -27,16 +27,21 @@ var upgradesinit := {
 	'+1 Target': { 'cost': 3, 'weight': 43 },
 	'+2 Targets': { 'cost': 5, 'weight': 15 },
 	'-1 Target': { 'cost': -4, 'weight': 9 },
-	'Traffic (+3 Targets, +13% shooting cooldown)': { 'cost': 3, 'weight': 6 }, 
+	'Traffic (+3 Targets, +15% shooting cooldown)': { 'cost': 4, 'weight': 5 }, 
 	
 	# MULTIPLIERS
 	'x2 Score Per Target': { 'cost': 5, 'weight': 6.5},
 	'x5 Score Per Target': { 'cost': 6, 'weight': 4},
-	'Coin Flip (x3 or ÷2 Score Per Target)': { 'cost': 4, 'weight': 7 },
+	
+	'+10 Score Per Target': { 'cost': 5, 'weight': 3},
+	
+	'Coin Flip (x4 or ÷2 Score Per Target)': { 'cost': 4, 'weight': 7 },
 	'Greed (+1x SPT for each $10 held)': { 'cost': 5, 'weight': 4 },
-
+	
 	# BUILD PAYOFFS
-	'Overheat (x5 Score if cooldown <= 0.3s)': { 'cost': 5, 'weight': 5 },
+	'Overheat (x6 Score if cooldown <= 0.35s)': { 'cost': 4, 'weight': 5 },
+	'Lonely (x10 Score if Targets <= 4)': { 'cost': 5, 'weight': 5 },
+	'Swarm (+1x SPT for each target)': { 'cost': 4, 'weight': 5 },
 
 	# FREE MONEY
 	'Free Money! (+$10)': { 'cost': 0, 'weight': 3 },
@@ -85,7 +90,7 @@ func updateStats():
 	
 	for up in ownedUpgrades.duplicate():
 		if up.begins_with("Coin Flip"):
-			var mult := 3.0 if rng.randf() < 0.5 else 0.5
+			var mult := 4.0 if rng.randf() < 0.5 else 0.5
 			mult = 0.5
 			
 			if mult < 1: # under 1
@@ -103,13 +108,16 @@ func updateStats():
 			targets -= 1
 		elif up == '+2 Targets':
 			targets += 2
-			
+		
+		elif up == '+10 Score Per Target':
+			scorePerTarget += 10
+		
 		elif up.begins_with('Greed'):
 			scorePerTarget += 1 * floor(money / 10)
-			
+		
 		elif up.begins_with('Traffic'):
 			targets += 3
-			cooldownspeed *= 1.13
+			cooldownspeed *= 1.15
 			
 		elif up == 'Shorter shooting cooldown (-10%)':
 			cooldownspeed *= 0.9
@@ -138,13 +146,22 @@ func updateStats():
 	
 	if roundlength < 0.5:
 		roundlength = 0.5
-		
-	# OTHER ONES
+	
+	# ONES DEPENDANT ON OTHER ONES
+	for up in ownedUpgrades: 
+		if up.begins_with('Swarm'):
+			scorePerTarget += (1.0 * (targets + 1))
+	
+	# OTHER ONES (Multiply)
 	for up in ownedUpgrades:
-		if up == 'Overheat (x5 Score if cooldown <= 0.3s)':
-			if cooldownspeed <= 0.3:
-				scorePerTarget *= 5
+		if up == 'Overheat (x6 Score if cooldown <= 0.35s)':
+			if cooldownspeed <= 0.35:
+				scorePerTarget *= 6
 				
+		elif up.begins_with('Lonely'):
+			if targets <= 4:
+				scorePerTarget *= 10
+		
 		elif up == 'Heavy (x3 Score, +25% cooldown)':
 			scorePerTarget *= 3
 			cooldownspeed *= 1.25
@@ -153,6 +170,7 @@ func updateStats():
 			scorePerTarget *= 2
 		elif up == 'x5 Score Per Target':
 			scorePerTarget *= 5
+		
 				
 	cooldownspeed = snappedf(cooldownspeed, 0.01)
 	money = snappedf(money, 0.01)
@@ -180,7 +198,13 @@ func calcTax():
 	ui.updateLabels(true)
 
 func formatcommas(number: float, decimals: int = 2) -> String:
-	var parts: PackedStringArray = str(snappedf(number, pow(10, -decimals))).split(".")
+	var snapped: float = snappedf(number, pow(10, -decimals))
+	var formatted: String = ("%.*f" % [decimals, snapped])
+	
+	if decimals > 0:
+		formatted = formatted.rstrip("0").rstrip(".")
+		
+	var parts: PackedStringArray = formatted.split(".")
 	var whole_str: String = parts[0]
 	var result: String = ""
 	var count: int = 0
@@ -191,11 +215,10 @@ func formatcommas(number: float, decimals: int = 2) -> String:
 		result = whole_str[i] + result
 		count += 1
 	
-	if parts.size() > 1 and int(parts[1]) != 0:
+	if parts.size() > 1:
 		return result + "." + parts[1]
 		
 	return result
-
 func playsound(path: String, pitch: float = 1.0, volume: float = 0.0):
 	var parent = get_parent()
 	if not parent:

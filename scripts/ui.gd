@@ -95,9 +95,12 @@ func _process(delta: float) -> void:
 	
 			Globals.canshoot = false
 	
+<<<<<<< HEAD
 			Globals.quota = 3.0
 			Globals.round = 1
 	
+=======
+>>>>>>> 47fa7e27a2ef962764cf72290138af2f12ec72fa
 			var roundlabelclone = roundLabel.duplicate()
 			get_parent().add_child(roundlabelclone)
 			

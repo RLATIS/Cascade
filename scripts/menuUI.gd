@@ -1,6 +1,9 @@
 extends CanvasLayer
 
 @export var bginthisscene : CanvasLayer
+@export var playmenu : CanvasLayer
+@export var creditpanel : Panel
+
 var usingcontroller := false
 var credittween: Tween
 
@@ -8,15 +11,13 @@ func _ready() -> void:
 	usingcontroller = Globals.onController
 	
 	for c in get_children():
-		if c == $creditpanel or c.is_ancestor_of($creditpanel):
-			continue
 		if c is CanvasItem:
 			c.modulate = Color('ffffff00')
 			var tween = create_tween()
 			tween.tween_property(c, "modulate", Color('ffffff'), 2.0)
 	
-	$creditpanel.modulate = Color('ffffff00')
-	$creditpanel.visible = true
+	creditpanel.modulate = Color('ffffff00')
+	creditpanel.visible = true
 	
 	$play.focus_mode = Control.FOCUS_ALL
 	$exit.focus_mode = Control.FOCUS_ALL
@@ -60,22 +61,23 @@ func _update_icons() -> void:
 	for btn in [$play, $exit]:
 		btn.get_node("ps4iconX").visible = (usingcontroller and btn == focused)
 
-func fadeouteverything(node: Node, time=0.5) -> void:
+func fadeouteverything(node: Node, reallyeverything=false, time=0.5) -> void:
 	if 'bg' in node.name:
 		return
+	
+	if not reallyeverything:
+		if 'title' in node.name or 'credit' in node.name:
+			print('skipping ' + node.name)
+			return
 	
 	if node is CanvasItem:
 		var t = create_tween()
 		t.tween_property(node, "self_modulate", Color("ffffff00"), time).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	
 	for child in node.get_children():
-		fadeouteverything(child, time)
+		fadeouteverything(child, reallyeverything, time)
 
-func _on_button_pressed() -> void: # play
-	print('clicked')
-	fadeouteverything(get_tree().current_scene)
-	await get_tree().create_timer(0.7).timeout
-	
+func begin():
 	var mainSCENE = load("res://scenes/main.tscn")
 	var mainINSTANCE = mainSCENE.instantiate()
 
@@ -90,6 +92,24 @@ func _on_button_pressed() -> void: # play
 	tree.current_scene = mainINSTANCE
 	curscene.queue_free()
 
+func _on_button_pressed() -> void: # play
+	print('clicked')
+	fadeouteverything(get_tree().current_scene)
+	await get_tree().create_timer(0.7).timeout
+	
+	self.visible = false
+	playmenu.visible = true
+	
+	for m in playmenu.get_children():
+		if m is CanvasItem:
+			m.self_modulate = Color.WHITE # reset selfmodulate or die
+			m.modulate = Color('ffffff00')
+			var mt = create_tween()
+			mt.tween_property(m, 'modulate', Color('ffffff'), 0.5)
+
+	await get_tree().create_timer(0.7).timeout
+	print('done loading playmenu')
+
 func _on_exit_pressed() -> void:
 	get_tree().quit()
 
@@ -97,10 +117,18 @@ func credshow() -> void:
 	if credittween:
 		credittween.kill()
 	credittween = create_tween()
-	credittween.tween_property($creditpanel, 'modulate', Color('ffffff'), 0.5)
+	credittween.tween_property(creditpanel, 'modulate', Color('ffffff'), 0.5)
 
 func credhide() -> void:
 	if credittween:
 		credittween.kill()
 	credittween = create_tween()
-	credittween.tween_property($creditpanel, 'modulate', Color('ffffff00'), 0.5)
+	credittween.tween_property(creditpanel, 'modulate', Color('ffffff00'), 0.5)
+
+
+func _on_begin_pressed() -> void:
+	fadeouteverything(get_tree().current_scene, true)
+	
+	await get_tree().create_timer(0.7).timeout
+
+	begin()

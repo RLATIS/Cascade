@@ -13,7 +13,11 @@ var cooldowntimer := 0.0
 @export var maxpoints := 60
 @export var timestep := 0.05
 
+var rng = RandomNumberGenerator.new()
+
 func _ready() -> void:
+	rng.seed = Globals.seed + 1
+	
 	self.modulate = Color('ffffff00')
 	
 	var tween = create_tween()
@@ -60,7 +64,7 @@ func _physics_process(delta: float) -> void:
 		if Globals.canshoot and cooldowntimer <= 0:
 			shoot()
 			cooldowntimer = Globals.cooldownspeed
-			Globals.playsound('res://sounds/shoot.wav', randf_range(0.7, 1.3))
+			Globals.playsound('res://sounds/shoot.wav', rng.randf_range(0.7, 1.3))
 
 func shoot() -> void:
 	var clone = self.duplicate() as RigidBody2D

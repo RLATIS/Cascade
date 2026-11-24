@@ -16,24 +16,30 @@ extends RigidBody2D
 var shouldteleport := true
 var isMain := true
 
-func _ready() -> void:
-	pass
-	
-	#spawn(Globals.initclones)
+var rng = RandomNumberGenerator.new()
 
+func _ready() -> void:
+	if isMain:
+		rng.seed = Globals.seed + 2
+	
 func spawn(clones):
 	if isMain:
 		self.visible = true
-		for i in range(clones):
-			var c = self.duplicate()
-			c.isMain = false
-			c.name = 'targetClone' + str(i)
-			self.get_parent().add_child(c)
-
+		if clones > 0:
+			print('spawning ' + str(clones) + ' clones')
+			for i in range(clones):
+				var c = self.duplicate()
+				c.isMain = false
+				c.name = 'targetClone' + str(i)
+				c.rng.seed = rng.seed + i
+				self.get_parent().add_child(c)
+		else:
+			print('no clones!!')
+			
 func hit():
 	print(self.name, ' was hit')
 	
-	Globals.playsound('res://sounds/explosion.wav', randf_range(0.7, 1.4), randf_range(-3, -0.5))
+	Globals.playsound('res://sounds/explosion.wav', rng.randf_range(0.7, 1.4), rng.randf_range(-3, -0.5))
 	Globals.score += Globals.scorePerTarget
 	
 	ui.updateLabels()
@@ -53,7 +59,7 @@ func particlespawn():
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	if shouldteleport:
-		var newpos = Vector2(randi_range(leftmost, rightmost), randi_range(upmost, downmost))
+		var newpos = Vector2(rng.randi_range(leftmost, rightmost), rng.randi_range(upmost, downmost))
 		state.transform = Transform2D(state.transform.get_rotation(), newpos)
 		
 		state.linear_velocity = Vector2.ZERO

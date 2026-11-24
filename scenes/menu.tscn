@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://cjnxsyfpslufq"]
+[gd_scene load_steps=8 format=3 uid="uid://cjnxsyfpslufq"]
 
 [ext_resource type="PackedScene" uid="uid://bb4vriqs8koif" path="res://scenes/effects.tscn" id="1_con2f"]
 [ext_resource type="PackedScene" uid="uid://e3lkvta0rwwl" path="res://scenes/bg.tscn" id="1_yqeox"]
 [ext_resource type="Script" uid="uid://bgaw65pmi0hmv" path="res://scripts/menuUI.gd" id="3_4ytvr"]
 [ext_resource type="FontFile" uid="uid://d37jpsgvq5ukx" path="res://textures/PixelatedEleganceRegular-ovawB.ttf" id="3_mhnvy"]
 [ext_resource type="Texture2D" uid="uid://dwut8j5b8k6b2" path="res://textures/PS4_ICON18.png" id="5_g3eks"]
+[ext_resource type="Script" uid="uid://boulo28mwkp2s" path="res://scripts/playmenu.gd" id="6_g3eks"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ytvr"]
 content_margin_left = 0.0
@@ -26,11 +27,9 @@ corner_detail = 5
 
 [node name="bg" parent="." instance=ExtResource("1_yqeox")]
 
-[node name="uimenu" type="CanvasLayer" parent="." node_paths=PackedStringArray("bginthisscene")]
-script = ExtResource("3_4ytvr")
-bginthisscene = NodePath("../bg")
+[node name="title" type="CanvasLayer" parent="."]
 
-[node name="title" type="Label" parent="uimenu"]
+[node name="title" type="Label" parent="title"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -48,74 +47,32 @@ text = "Cascade"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="play" type="Button" parent="uimenu"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.5
-offset_top = -15.5
-offset_right = 20.5
-offset_bottom = 15.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("3_mhnvy")
-theme_override_font_sizes/font_size = 32
-text = "Play"
-
-[node name="ps4iconX" type="Sprite2D" parent="uimenu/play"]
-visible = false
-position = Vector2(119, 18.5)
-scale = Vector2(1.6, 1.6)
-texture = ExtResource("5_g3eks")
-
-[node name="exit" type="Button" parent="uimenu"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = 39.0
-offset_right = 50.0
-offset_bottom = 76.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("3_mhnvy")
-theme_override_font_sizes/font_size = 32
-text = "Exit"
-
-[node name="ps4iconX" type="Sprite2D" parent="uimenu/exit"]
-visible = false
-position = Vector2(127, 19)
-scale = Vector2(1.6, 1.6)
-texture = ExtResource("5_g3eks")
-
-[node name="credittext" type="Label" parent="uimenu"]
+[node name="credittext" type="Label" parent="title"]
 modulate = Color(1, 1, 1, 0.59607846)
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 9.0
-offset_top = -19.0
-offset_right = 409.0
+offset_top = -224.0
+offset_right = 250.0
 offset_bottom = -7.0
 grow_vertical = 0
 mouse_filter = 0
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 12
-text = "Hover here for credits..."
-vertical_alignment = 1
+text = "v0.3 | Hover here for credits..."
+vertical_alignment = 2
 
-[node name="creditpanel" type="Panel" parent="uimenu"]
+[node name="creditpanel" type="Panel" parent="title"]
+visible = false
 offset_left = 8.0
 offset_top = 423.0
 offset_right = 208.0
 offset_bottom = 623.0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_4ytvr")
 
-[node name="credits" type="Label" parent="uimenu/creditpanel"]
+[node name="credits" type="Label" parent="title/creditpanel"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -139,7 +96,321 @@ Font:
 fontspace.com
 (Pixelated Elegance)"
 
-[connection signal="pressed" from="uimenu/play" to="uimenu" method="_on_button_pressed"]
-[connection signal="pressed" from="uimenu/exit" to="uimenu" method="_on_exit_pressed"]
-[connection signal="mouse_entered" from="uimenu/credittext" to="uimenu" method="credshow"]
-[connection signal="mouse_exited" from="uimenu/credittext" to="uimenu" method="credhide"]
+[node name="uimenu1" type="CanvasLayer" parent="." node_paths=PackedStringArray("bginthisscene", "playmenu", "creditpanel")]
+script = ExtResource("3_4ytvr")
+bginthisscene = NodePath("../bg")
+playmenu = NodePath("../playmenu")
+creditpanel = NodePath("../title/creditpanel")
+
+[node name="play" type="Button" parent="uimenu1"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = -15.5
+offset_right = 20.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 32
+text = "Play"
+
+[node name="ps4iconX" type="Sprite2D" parent="uimenu1/play"]
+visible = false
+position = Vector2(119, 18.5)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("5_g3eks")
+
+[node name="exit" type="Button" parent="uimenu1"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = 39.0
+offset_right = 50.0
+offset_bottom = 76.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 32
+text = "Exit"
+
+[node name="ps4iconX" type="Sprite2D" parent="uimenu1/exit"]
+visible = false
+position = Vector2(127, 19)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("5_g3eks")
+
+[node name="playmenu" type="CanvasLayer" parent="."]
+visible = false
+script = ExtResource("6_g3eks")
+
+[node name="presets" type="Label" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -389.0
+offset_top = -99.0
+offset_right = 389.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 20
+text = "Presets:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="easy" type="Button" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = -30.0
+offset_right = -107.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 32
+text = "Easy"
+
+[node name="ps4iconX" type="Sprite2D" parent="playmenu/easy"]
+visible = false
+position = Vector2(119, 18.5)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("5_g3eks")
+
+[node name="medium" type="Button" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -89.5
+offset_top = -30.5
+offset_right = 89.5
+offset_bottom = 6.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 32
+text = "Medium"
+
+[node name="ps4iconX" type="Sprite2D" parent="playmenu/medium"]
+visible = false
+position = Vector2(119, 18.5)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("5_g3eks")
+
+[node name="hard" type="Button" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 105.5
+offset_top = -30.0
+offset_right = 216.5
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 32
+text = "Hard"
+
+[node name="ps4iconX" type="Sprite2D" parent="playmenu/hard"]
+visible = false
+position = Vector2(119, 18.5)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("5_g3eks")
+
+[node name="begin" type="Button" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = 254.0
+offset_right = 63.0
+offset_bottom = 291.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 32
+text = "Begin"
+
+[node name="ps4iconX" type="Sprite2D" parent="playmenu/begin"]
+visible = false
+position = Vector2(119, 18.5)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("5_g3eks")
+
+[node name="mqSLIDER" type="HSlider" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 38.0
+offset_right = 100.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="mqLABEL" type="Label" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -389.0
+offset_top = 26.0
+offset_right = 389.0
+offset_bottom = 119.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 20
+text = "Multiply Quota (Per Round)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="mqAMOUNT" type="Label" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 106.0
+offset_top = 37.0
+offset_right = 884.0
+offset_bottom = 56.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 14
+text = "1.1x"
+vertical_alignment = 1
+
+[node name="tiSLIDER" type="HSlider" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 111.0
+offset_right = 100.0
+offset_bottom = 127.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="tiLABEL" type="Label" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -389.0
+offset_top = 99.0
+offset_right = 389.0
+offset_bottom = 192.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 20
+text = "Tax Increment (+%) Per Round"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="tiAMOUNT" type="Label" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 106.0
+offset_top = 110.0
+offset_right = 884.0
+offset_bottom = 129.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 14
+text = "+0%"
+vertical_alignment = 1
+
+[node name="itSLIDER" type="HSlider" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = 184.0
+offset_right = 100.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+min_value = 1.0
+max_value = 19.0
+value = 1.0
+
+[node name="itLABEL" type="Label" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -389.0
+offset_top = 172.0
+offset_right = 389.0
+offset_bottom = 265.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 20
+text = "Inital Targets"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="itAMOUNT" type="Label" parent="playmenu"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 106.0
+offset_top = 183.0
+offset_right = 884.0
+offset_bottom = 202.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 14
+text = "7 Targets"
+vertical_alignment = 1
+
+[connection signal="mouse_entered" from="title/credittext" to="uimenu1" method="credshow"]
+[connection signal="mouse_exited" from="title/credittext" to="uimenu1" method="credhide"]
+[connection signal="pressed" from="uimenu1/play" to="uimenu1" method="_on_button_pressed"]
+[connection signal="pressed" from="uimenu1/exit" to="uimenu1" method="_on_exit_pressed"]
+[connection signal="pressed" from="playmenu/easy" to="playmenu" method="_on_easy_pressed"]
+[connection signal="pressed" from="playmenu/medium" to="playmenu" method="_on_medium_pressed"]
+[connection signal="pressed" from="playmenu/hard" to="playmenu" method="_on_hard_pressed"]
+[connection signal="pressed" from="playmenu/begin" to="uimenu1" method="_on_begin_pressed"]
+[connection signal="value_changed" from="playmenu/mqSLIDER" to="playmenu" method="_on_mq_slider_value_changed"]
+[connection signal="value_changed" from="playmenu/tiSLIDER" to="playmenu" method="_on_ti_slider_value_changed"]
+[connection signal="value_changed" from="playmenu/itSLIDER" to="playmenu" method="_on_it_slider_value_changed"]

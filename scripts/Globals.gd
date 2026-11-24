@@ -45,7 +45,6 @@ var upgradesinit := {
 
 # END CHANGEABLE VARIABLES
 
-var difficulty := 'medium'
 var roundlength := 10.0
 var targets := 15
 var score := 0.0
@@ -61,6 +60,8 @@ var psicons := []
 var round := 1
 var baseSPT := 1.0
 var ui : CanvasLayer
+var seed := 1
+var rng = RandomNumberGenerator.new()
 
 var onController := false:
 	set(value):
@@ -84,11 +85,11 @@ func updateStats():
 	
 	for up in ownedUpgrades.duplicate():
 		if up.begins_with("Coin Flip"):
-			var mult := 3.0 if randf() < 0.5 else 0.5
+			var mult := 3.0 if rng.randf() < 0.5 else 0.5
 			mult = 0.5
 			
 			if mult < 1: # under 1
-				playsound('res://sounds/bad.wav', randf_range(0.9, 1.1), randf_range(3.0, 5.0))
+				playsound('res://sounds/bad.wav', rng.randf_range(0.9, 1.1), rng.randf_range(3.0, 5.0))
 			
 			baseSPT = max(baseSPT * mult, 0.05) 
 			ownedUpgrades.erase(up)
@@ -129,7 +130,7 @@ func updateStats():
 		elif up.begins_with('Free Money! (+$') or up.begins_with('Jackpot! (+$'):
 			money += up.to_int()
 			
-			playsound('res://sounds/coin.wav', randf_range(0.95, 1.1), randf_range(-0.5, 0.5))
+			playsound('res://sounds/coin.wav', rng.randf_range(0.95, 1.1), rng.randf_range(-0.5, 0.5))
 			ownedUpgrades.erase(up)
 		
 	if targets < 0:
@@ -152,17 +153,15 @@ func updateStats():
 			scorePerTarget *= 2
 		elif up == 'x5 Score Per Target':
 			scorePerTarget *= 5
-			
-
 				
 	cooldownspeed = snappedf(cooldownspeed, 0.01)
 	money = snappedf(money, 0.01)
 	
 	statsLabel.text = "Round length: {roundlength} secs\nTargets: {targets}\nShooting Cooldown: {cooldownspeed} secs\nScore Per Target: {spt}\nShop Tax: {t}%\nPress 'E' to exit shop.".format({
-		"roundlength": roundlength,
-		"targets": targets,
+		"roundlength": formatcommas(roundlength),
+		"targets": formatcommas(targets+1),
 		"cooldownspeed": cooldownspeed,
-		'spt': scorePerTarget,
+		'spt': formatcommas(scorePerTarget),
 		't': snappedf((tax*100)-100, 0.01) 
 	})
 
@@ -221,28 +220,23 @@ func playsound(path: String, pitch: float = 1.0, volume: float = 0.0):
 	player.queue_free() # delete
 
 func newgame() -> void:
-	if difficulty == 'easy':
-		quotamultiply = 1.35
-	if difficulty == 'medium': # this prolly really stupid way but good enough
-		quotamultiply = 1.5
-	if difficulty == 'hard':
-		quotamultiply = 2.0
+	seed = randi_range(1, 100000000000)
+	
+	rng.seed = seed
+
+	upgrades = upgradesinit
 
 	await get_tree().process_frame # so can find child
 	
 	psicons = get_tree().root.find_children("*ps4icon*", "", true, false)
 	print(psicons)
-	
-	upgrades = upgradesinit
-		
+			
 	statsLabel = get_tree().current_scene.find_child("statsLabel", true, false)
 
 	ui = get_tree().current_scene.find_child("ui", true, false)
 
 	if statsLabel == null:
 		statsLabel = ui.statsLabel # good because it is referenced inside ui
-
-	statsLabel.visible = false
 
 	statsLabel.visible = false
 	updateStats()

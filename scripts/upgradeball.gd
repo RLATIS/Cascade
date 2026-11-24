@@ -17,7 +17,12 @@ var ui : CanvasLayer
 
 var isMain := true
 
+var rng = RandomNumberGenerator.new()
+
 func _ready() -> void:
+	if isMain:
+		rng.seed = Globals.seed + 3
+		
 	hitTrauma = targetBall.hitTrauma
 	cam = targetBall.cam
 	ui = targetBall.ui
@@ -29,7 +34,7 @@ func _ready() -> void:
 			totalWeight += Globals.upgrades[upgradename].weight
 		
 		# random number between 0 and totalWeight
-		var randomvalue := randi_range(0, totalWeight)
+		var randomvalue := rng.randi_range(0, totalWeight)
 		var currentWeight := 0
 		var weight := 0
 		
@@ -64,7 +69,7 @@ func particlespawn():
 	p.finished.connect(p.queue_free)
 
 func die(dotrauma=true):
-	Globals.playsound('res://sounds/explosion.wav', randf_range(0.7, 1.4), randf_range(-3, -0.5))
+	Globals.playsound('res://sounds/explosion.wav', rng.randf_range(0.7, 1.4), rng.randf_range(-3, -0.5))
 	ui.updateLabels(true)
 	particlespawn()
 	if dotrauma:
@@ -77,12 +82,12 @@ func hit():
 		Globals.ownedUpgrades.append(upgrade)
 		Globals.money -= cost
 		
-		Globals.playsound('res://sounds/upgrade.wav', randf_range(0.9, 1.1), randf_range(-0.5, 0.0))
+		Globals.playsound('res://sounds/upgrade.wav', rng.randf_range(0.9, 1.1), rng.randf_range(-0.5, 0.0))
 		
 		Globals.updateStats()
 		die()
 	else:
-		Globals.playsound('res://sounds/poor.wav', 1.0, randf_range(-0.5, 0.5))
+		Globals.playsound('res://sounds/poor.wav', 1.0, rng.randf_range(-0.5, 0.5))
 
 func spawnupgrades():
 	print('spawing upgrades!')
@@ -91,6 +96,7 @@ func spawnupgrades():
 		var c = self.duplicate()
 		c.position.x = 257
 		c.position.y = (i-1) * 190
+		c.rng.seed = rng.seed + i
 		
 		c.name = 'REALUPGRADE' + str(i)
 		c.isMain = false

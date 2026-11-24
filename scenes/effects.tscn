@@ -8,7 +8,7 @@ shader_parameter/r_displacement = Vector2(1, 0)
 shader_parameter/g_displacement = Vector2(0, 0)
 shader_parameter/b_displacement = Vector2(-1, 0)
 shader_parameter/aura_size = 7.0000003325
-shader_parameter/aura_intensity = 0.6
+shader_parameter/aura_intensity = 0.50000002375
 shader_parameter/aura_tint = Color(1, 1, 1, 1)
 
 [node name="effects" type="CanvasLayer"]

@@ -1,0 +1,24 @@
+Animation for upgradeballs from top
+make % come after the (frozen)
+
+Done:
+	20 second timer then end round then restart after something happens
+	path showing trajectory 
+	Abilities
+	Cooldown
+	Levels
+	Menu
+	Quota
+	Upgrades:
+		Shorter cooldown
+		Faster Ball
+		Bouncier Ball
+		More Targets
+		More Score per Target
+		+ extras
+		
+Used resources:
+	Chromatic Aberation: https://godotshaders.com/shader/just-chromatic-aberration/
+	Bloom: https://godotshaders.com/shader/bloom/
+	
+	Font: https://www.fontspace.com/pixelated-elegance-font-f126145

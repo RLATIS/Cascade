@@ -17,6 +17,8 @@ var triggeredyet := false
 var scoredSoFarMoney := 0
 var exiting := false
 
+var beatenquotatrigger := false
+
 func _ready() -> void:
 	Globals.newgame()
 	
@@ -55,7 +57,11 @@ func _process(delta: float) -> void:
 			
 			Globals.playsound('res://sounds/coin.wav', randf_range(0.9, 1.2), randf_range(-1.0, -0.25))
 			updateLabels()
-
+			
+		if not beatenquotatrigger:
+			if Globals.score >= Globals.quota:
+				beatenquotatrigger = true
+				Globals.playsound('res://sounds/upgrade.wav', randf_range(0.9, 1.2), randf_range(2.0, 2.25))
 
 	if timerBar.value <= 0 and not triggeredyet:
 		triggeredyet = true
@@ -202,6 +208,7 @@ func restartround():
 	roundLabel.modulate = Color.WHITE
 	
 	exiting = false
+	beatenquotatrigger = false
 
 
 func waitfornobullets() -> void:

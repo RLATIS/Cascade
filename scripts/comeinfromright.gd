@@ -6,6 +6,8 @@ var initx := 0.0
 @export var col : CollisionShape2D
 
 func _ready() -> void:
+	$wallTexture.texture.noise.seed = Globals.seed
+	
 	col.set_deferred("disabled", true)
 	initx = position.x
 	position.x = offscreenx

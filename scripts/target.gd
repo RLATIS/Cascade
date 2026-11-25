@@ -37,7 +37,7 @@ func spawn(clones):
 			print('no clones!!')
 			
 func hit():
-	print(self.name, ' was hit')
+	#print(self.name, ' was hit')
 	
 	Globals.playsound('res://sounds/explosion.wav', rng.randf_range(0.7, 1.4), rng.randf_range(-3, -0.5))
 	Globals.score += Globals.scorePerTarget

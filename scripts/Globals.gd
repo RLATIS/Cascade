@@ -189,13 +189,13 @@ func updateStats():
 		
 	cooldownspeed = snappedf(cooldownspeed, 0.01)
 	money = snappedf(money, 0.01)
-	
+
 	statsLabel.text = "Round length: {roundlength} secs\nTargets: {targets}\nShooting Cooldown: {cooldownspeed} secs\nScore Per Target: {spt}\nShop Tax: {t}%\nPress 'E' to exit shop.".format({
 		"roundlength": formatcommas(roundlength),
 		"targets": formatcommas(targets+1),
 		"cooldownspeed": cooldownspeed,
 		'spt': formatcommas(scorePerTarget),
-		't': snappedf((tax*100)-100, 0.01) 
+		't': str(snappedf((tax * 100.0) - 100.0, 0.01)) + (' (Frozen!)' if 'Cheapskate (Freeze shop tax)' in ownedUpgrades else '')
 	})
 
 func entershop(): # called upon enter shop
@@ -208,7 +208,7 @@ func entershop(): # called upon enter shop
 			playsound('res://sounds/coin.wav', randf_range(0.9, 1.2), randf_range(-1.0, -0.25))
 
 func calcTax():
-	if not 'Cheapskate' in ownedUpgrades:
+	if not 'Cheapskate (Freeze shop tax)' in ownedUpgrades:
 		tax += taxincrement
 		upgrades = {}
 
@@ -221,6 +221,8 @@ func calcTax():
 
 		updateStats()
 		ui.updateLabels(true)
+	else:
+		print('not incrementing tax!!!')
 
 func formatcommas(number: float, decimals: int = 2) -> String:
 	var snapped: float = snappedf(number, pow(10, -decimals))
@@ -269,6 +271,7 @@ func playsound(path: String, pitch: float = 1.0, volume: float = 0.0):
 
 func newgame() -> void:
 	rng.seed = seed
+	print('STARTED NEW GAME ON ', seed)
 
 	upgrades = upgradesinit
 

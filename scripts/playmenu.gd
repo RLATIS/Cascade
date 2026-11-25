@@ -7,6 +7,9 @@ func updateall():
 	_on_seed_inpt_text_changed($seedINPT.text)
 
 func _ready() -> void:
+	if Globals.lastseed != 999999999999:
+		$lastseed.text = 'Last Seed: ' + str(Globals.lastseed)
+	
 	$seedINPT.text = str(randi_range(1, 9999999))
 	_on_medium_pressed()
 

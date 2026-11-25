@@ -11,6 +11,9 @@ extends Node
 @export var find2 := 'Cheapskate'
 @export var find3 := 'Greed'
 
+# 230106: 3 Jackpots
+# 5059484: Jackpot, Greed, Free money
+
 func _ready():
 	if calc:
 		var totalWeight := 0

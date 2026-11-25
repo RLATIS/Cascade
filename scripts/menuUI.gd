@@ -3,6 +3,7 @@ extends CanvasLayer
 @export var bginthisscene : CanvasLayer
 @export var playmenu : CanvasLayer
 @export var creditpanel : Panel
+@export var lastseed : Label
 
 var usingcontroller := false
 var credittween: Tween
@@ -85,6 +86,8 @@ func begin():
 	var bg = mainINSTANCE.get_node("bg")
 	bg.initcol2 = Color.from_hsv(bginthisscene.hue, 0.87, 0.4, 0.5)
 
+	Globals.lastseed = Globals.seed
+	
 	# swap
 	var tree = get_tree()
 	var curscene = tree.current_scene
@@ -107,7 +110,10 @@ func _on_button_pressed() -> void: # play
 			m.self_modulate = Color.WHITE # reset selfmodulate or die
 			m.modulate = Color('ffffff00')
 			var mt = create_tween()
-			mt.tween_property(m, 'modulate', Color('ffffff'), 0.5)
+			if m.name != 'lastseed':
+				mt.tween_property(m, 'modulate', Color('ffffff'), 0.5)
+			else:
+				mt.tween_property(m, 'modulate', Color('ffffff98'), 0.5)
 
 	await get_tree().create_timer(0.5).timeout
 	

@@ -75,6 +75,7 @@ var baseSPT := 1.0
 var ui : CanvasLayer
 var seed := 1
 var rng = RandomNumberGenerator.new()
+var lastseed := 999999999999
 
 var onController := false:
 	set(value):
@@ -190,12 +191,13 @@ func updateStats():
 	cooldownspeed = snappedf(cooldownspeed, 0.01)
 	money = snappedf(money, 0.01)
 
-	statsLabel.text = "Round length: {roundlength} secs\nTargets: {targets}\nShooting Cooldown: {cooldownspeed} secs\nScore Per Target: {spt}\nShop Tax: {t}%\nPress 'E' to exit shop.".format({
+	statsLabel.text = "Round length: {roundlength} secs\nTargets: {targets}\nShooting Cooldown: {cooldownspeed} secs\nScore Per Target: {spt}\nShop Tax: {t}% {tfrozen}\nPress 'E' to exit shop.".format({
 		"roundlength": formatcommas(roundlength),
 		"targets": formatcommas(targets+1),
 		"cooldownspeed": cooldownspeed,
 		'spt': formatcommas(scorePerTarget),
-		't': str(snappedf((tax * 100.0) - 100.0, 0.01)) + (' (Frozen!)' if 'Cheapskate (Freeze shop tax)' in ownedUpgrades else '')
+		't': str(snappedf((tax * 100.0) - 100.0, 0.01)),
+		'tfrozen': (' (Frozen!)' if 'Cheapskate (Freeze shop tax)' in ownedUpgrades else ''),
 	})
 
 func entershop(): # called upon enter shop

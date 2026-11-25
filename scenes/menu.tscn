@@ -61,7 +61,7 @@ grow_vertical = 0
 mouse_filter = 0
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 12
-text = "v0.535 | Hover here for credits..."
+text = "v0.54 | Hover here for credits..."
 vertical_alignment = 2
 
 [node name="creditpanel" type="Panel" parent="title"]
@@ -97,11 +97,12 @@ Font:
 fontspace.com
 (Pixelated Elegance)"
 
-[node name="uimenu1" type="CanvasLayer" parent="." node_paths=PackedStringArray("bginthisscene", "playmenu", "creditpanel")]
+[node name="uimenu1" type="CanvasLayer" parent="." node_paths=PackedStringArray("bginthisscene", "playmenu", "creditpanel", "lastseed")]
 script = ExtResource("3_4ytvr")
 bginthisscene = NodePath("../bg")
 playmenu = NodePath("../playmenu")
 creditpanel = NodePath("../title/creditpanel")
+lastseed = NodePath("../playmenu/lastseed")
 
 [node name="play" type="Button" parent="uimenu1"]
 anchors_preset = 8
@@ -421,6 +422,23 @@ theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 14
 text = "7 Targets"
 vertical_alignment = 1
+
+[node name="lastseed" type="Label" parent="playmenu"]
+modulate = Color(1, 1, 1, 0.59607846)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 885.0
+offset_top = -17.0
+offset_right = 1142.0
+offset_bottom = -5.0
+grow_vertical = 0
+mouse_filter = 0
+theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_font_sizes/font_size = 12
+text = "Last Seed: _______"
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="seedcracker" type="Node2D" parent="."]
 script = ExtResource("7_v86rl")

@@ -14,6 +14,7 @@ var cooldowntimer := 0.0
 @export var timestep := 0.05
 
 var rng = RandomNumberGenerator.new()
+var spamtimer := 0.0
 
 func _ready() -> void:
 	rng.seed = Globals.seed + 1
@@ -37,6 +38,9 @@ func _physics_process(delta: float) -> void:
 		
 	if cooldowntimer > 0:
 		cooldowntimer -= delta
+	
+	if spamtimer > 0:
+		spamtimer -= delta
 	
 	if Input.is_action_pressed("aimup"):
 		rotate(-turnspeed)
@@ -66,6 +70,13 @@ func _physics_process(delta: float) -> void:
 			cooldowntimer = Globals.cooldownspeed
 			Globals.playsound('res://sounds/shoot.wav', rng.randf_range(0.7, 1.3))
 
+	if Input.is_action_pressed('shoot'):
+		if Globals.canshoot and cooldowntimer <= 0 and spamtimer <= 0:
+			spamtimer = 0.1
+			shoot()
+			cooldowntimer = Globals.cooldownspeed
+			Globals.playsound('res://sounds/shoot.wav', rng.randf_range(0.7, 1.3))
+		
 func shoot() -> void:
 	var clone = self.duplicate() as RigidBody2D
 	clone.isClone = true

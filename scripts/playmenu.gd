@@ -53,7 +53,7 @@ func _on_ti_slider_value_changed(value: float) -> void:
 	Globals.taxincrement = am / 100
 
 func _on_it_slider_value_changed(value: float) -> void:
-	$itAMOUNT.text = str(value + 1) + ' Targets'
+	$itAMOUNT.text = str(int(value + 1)) + ' Targets'
 	
 	Globals.initclones = value
 	

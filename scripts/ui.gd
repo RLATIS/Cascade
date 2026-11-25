@@ -90,13 +90,16 @@ func _process(delta: float) -> void:
 			Globals.quota = snapped(Globals.quota * Globals.quotamultiply, 0.5)
 			Globals.calcTax()
 			
+			Globals.entershop()
 		else: # lose :(
 			Globals.playsound('res://sounds/shop.wav', randf_range(0.4, 0.43), 3.0)
 	
 			Globals.canshoot = false
 	
+			# reset things here in case globals fails
 			Globals.quota = 3.0
 			Globals.round = 1
+			Globals.money = 0
 	
 			var roundlabelclone = roundLabel.duplicate()
 			get_parent().add_child(roundlabelclone)

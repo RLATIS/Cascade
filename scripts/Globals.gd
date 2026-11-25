@@ -46,9 +46,14 @@ var upgradesinit := {
 	'Swarm (+1x SPT for each target)': { 'cost': 4, 'weight': 5 },
 	'Sniper (x8 Score if cooldown >= 1.0s)': { 'cost': 5, 'weight': 5},
 
+	# OTHER
+	'Interest (Gain 15% of held money each round)': { 'cost': 5, 'weight': 3},
+
 	# FREE MONEY
 	'Free Money! (+$15)': { 'cost': 0, 'weight': 3 },
-	'Jackpot! (+$50)': { 'cost': 0, 'weight': 1 }
+	'Jackpot! (+$50)': { 'cost': 0, 'weight': 1 },
+	
+	'Cheapskate (Freeze shop tax)': { 'cost': 3, 'weight': 3 }
 }
 
 # END CHANGEABLE VARIABLES
@@ -193,19 +198,29 @@ func updateStats():
 		't': snappedf((tax*100)-100, 0.01) 
 	})
 
+func entershop(): # called upon enter shop
+	for up in ownedUpgrades:
+		if up.to_lower().begins_with('interest'):
+			print('adding $', money * 0.15)
+			
+			money += (money * 0.15)
+			
+			playsound('res://sounds/coin.wav', randf_range(0.9, 1.2), randf_range(-1.0, -0.25))
+
 func calcTax():
-	tax += taxincrement
-	upgrades = {}
+	if not 'Cheapskate' in ownedUpgrades:
+		tax += taxincrement
+		upgrades = {}
 
-	for upgradename in upgradesinit.keys():
-		var basedata = upgradesinit[upgradename]
-		upgrades[upgradename] = {
-			'cost': snappedf(basedata['cost'] * tax, 0.1),
-			'weight': basedata['weight']
-		}
+		for upgradename in upgradesinit.keys():
+			var basedata = upgradesinit[upgradename]
+			upgrades[upgradename] = {
+				'cost': snappedf(basedata['cost'] * tax, 0.1),
+				'weight': basedata['weight']
+			}
 
-	updateStats()
-	ui.updateLabels(true)
+		updateStats()
+		ui.updateLabels(true)
 
 func formatcommas(number: float, decimals: int = 2) -> String:
 	var snapped: float = snappedf(number, pow(10, -decimals))
@@ -256,6 +271,9 @@ func newgame() -> void:
 	rng.seed = seed
 
 	upgrades = upgradesinit
+
+	Globals.round = 1
+	Globals.money = 0
 
 	await get_tree().process_frame # so can find child
 	

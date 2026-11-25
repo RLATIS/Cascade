@@ -40,7 +40,7 @@ func _ready() -> void:
 		
 		for upgradeName in Globals.upgrades.keys():
 			currentWeight += Globals.upgrades[upgradeName].weight
-			if randomvalue <= currentWeight:
+			if randomvalue < currentWeight:
 				upgrade = upgradeName
 				weight = Globals.upgrades[upgradeName].weight
 				cost = Globals.upgrades[upgradeName].cost
@@ -90,17 +90,16 @@ func hit():
 
 func spawnupgrades():
 	print('spawing upgrades!')
-	
+
 	for i in range(upgradesPerRound):
 		var c = self.duplicate()
 		c.position.x = 257
 		c.position.y = (i-1) * 190
-		rng.seed += i*10
-		c.rng.seed = rng.seed 
-		
+		c.rng.seed = Globals.seed + Globals.round * 1000 + i * 10
+
 		c.name = 'REALUPGRADE' + str(i)
 		c.isMain = false
-		
+
 		get_parent().add_child(c)
 		
 func _on_hitarea_body_entered(body: Node2D) -> void:

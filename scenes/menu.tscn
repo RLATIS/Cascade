@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cjnxsyfpslufq"]
+[gd_scene load_steps=9 format=3 uid="uid://cjnxsyfpslufq"]
 
 [ext_resource type="PackedScene" uid="uid://bb4vriqs8koif" path="res://scenes/effects.tscn" id="1_con2f"]
 [ext_resource type="PackedScene" uid="uid://e3lkvta0rwwl" path="res://scenes/bg.tscn" id="1_yqeox"]
@@ -6,6 +6,7 @@
 [ext_resource type="FontFile" uid="uid://d37jpsgvq5ukx" path="res://textures/PixelatedEleganceRegular-ovawB.ttf" id="3_mhnvy"]
 [ext_resource type="Texture2D" uid="uid://dwut8j5b8k6b2" path="res://textures/PS4_ICON18.png" id="5_g3eks"]
 [ext_resource type="Script" uid="uid://boulo28mwkp2s" path="res://scripts/playmenu.gd" id="6_g3eks"]
+[ext_resource type="Script" uid="uid://c7eash3p64cpr" path="res://scripts/jackpotfinder.gd" id="7_v86rl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ytvr"]
 content_margin_left = 0.0
@@ -60,7 +61,7 @@ grow_vertical = 0
 mouse_filter = 0
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 12
-text = "v0.51 | Hover here for credits..."
+text = "v0.53 | Hover here for credits..."
 vertical_alignment = 2
 
 [node name="creditpanel" type="Panel" parent="title"]
@@ -420,6 +421,9 @@ theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 14
 text = "7 Targets"
 vertical_alignment = 1
+
+[node name="seedcracker" type="Node2D" parent="."]
+script = ExtResource("7_v86rl")
 
 [connection signal="mouse_entered" from="title/credittext" to="uimenu1" method="credshow"]
 [connection signal="mouse_exited" from="title/credittext" to="uimenu1" method="credhide"]

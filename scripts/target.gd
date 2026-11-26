@@ -52,7 +52,7 @@ func hit():
 		
 		Globals.score += Globals.scorePerTarget
 		
-		if randf() <= 0.0066666666: # 1 in 150
+		if randf() <= 0.0075: # 1 in 133.333
 			isRainbow = true
 		else:
 			isRainbow = false

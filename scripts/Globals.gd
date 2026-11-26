@@ -2,7 +2,7 @@ extends Node2D
 
 # CHANGEABLE VARIABLES 
 
-var version := 0.66
+var version := 0.665
 var initclones := 7
 var initcooldownspeed = 0.7
 var initroundlength := 10.0

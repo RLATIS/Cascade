@@ -13,12 +13,16 @@ extends CanvasLayer
 @onready var timerBar : ProgressBar = $timer
 @onready var roundLabel : Label = $roundLabel
 
+@export var pausemenu : CanvasLayer
+
+var exiting := false
+
 var triggeredyet := false
 
 var lastScoreCheckedForMoney := 0.0
 var moneyScoreRemainder := 0.0
 
-var exiting := false
+var LEAVINGGAME := false
 
 var beatenquotatrigger := false
 
@@ -47,7 +51,7 @@ func updateLabels(eq:=false):
 	Globals.updateStats()
 
 func _process(delta: float) -> void:
-	if timerBar.value > 0:
+	if timerBar.value > 0 and not LEAVINGGAME:
 		timerBar.value -= (100.0 / Globals.roundlength) * delta
 		
 		var scoreDiff: float = Globals.score - lastScoreCheckedForMoney
@@ -233,3 +237,52 @@ func waitfornobullets() -> void:
 			break
 			
 		await get_tree().process_frame
+
+
+func _on_quit_pressed() -> void:
+	LEAVINGGAME = true
+	
+	Globals.canshoot = false
+	pausemenu.paused = false
+	pausemenu.upd()
+	
+	
+	get_tree().paused = true 
+	
+	await get_tree().create_timer(0.33)
+
+	get_tree().paused = true 
+
+	# reset things here in case globals fails
+	Globals.quota = 3.0
+	Globals.round = 1
+	Globals.money = 0
+	Globals.scorePerTarget = 0
+	Globals.ownedUpgrades.clear()
+	
+	$roundLabel.visible = false
+	
+	var zoominend = create_tween() 
+	zoominend.tween_property(cam, "zoom", Vector2(50.0, 50.0), 2.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	for c in get_children():
+		var ctween = create_tween()
+		ctween.tween_property(c, 'modulate', Color('ffffff00'), 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	
+	var pathhidetween = create_tween()
+	pathhidetween.tween_property(path, 'modulate', Color('ffffff00'), 1.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	
+	await zoominend.finished
+	
+	var menuSCENE = load("res://scenes/menu.tscn")
+	var menuINSTANCE = menuSCENE.instantiate()
+
+	# cool bg no jump
+	var bg = menuINSTANCE.get_node("bg")
+	bg.initcol2 = Color.from_hsv(bginthisscene.hue, 0.87, 0.4, 0.5)
+
+	# swap
+	var tree = get_tree()
+	var curscene = tree.current_scene
+	tree.root.add_child(menuINSTANCE)
+	tree.current_scene = menuINSTANCE
+	curscene.queue_free()

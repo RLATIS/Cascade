@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bwy770u2xxemf"]
+[gd_scene load_steps=34 format=3 uid="uid://bwy770u2xxemf"]
 
 [ext_resource type="Script" uid="uid://cyquit5jkh1s5" path="res://scripts/Globals.gd" id="1_tefeu"]
 [ext_resource type="PackedScene" uid="uid://bb4vriqs8koif" path="res://scenes/effects.tscn" id="2_eb6dy"]
@@ -13,6 +13,10 @@
 [ext_resource type="Script" uid="uid://re7wfxnmhfnv" path="res://scripts/comeinfromright.gd" id="9_trceg"]
 [ext_resource type="Texture2D" uid="uid://oylbid0hp67c" path="res://textures/PS4_ICON33.png" id="10_trceg"]
 [ext_resource type="PackedScene" uid="uid://e3lkvta0rwwl" path="res://scenes/bg.tscn" id="12_eb6dy"]
+[ext_resource type="Script" uid="uid://b8xb5icx0oi65" path="res://scripts/pause.gd" id="14_a8y0u"]
+[ext_resource type="Texture2D" uid="uid://dwut8j5b8k6b2" path="res://textures/PS4_ICON18.png" id="15_jkv2x"]
+[ext_resource type="StyleBox" uid="uid://bnapb8o0hwfyo" path="res://scenes/styleboxoutline.tres" id="15_muem4"]
+[ext_resource type="Script" uid="uid://dnkvfgx3jm2lh" path="res://scripts/movearound.gd" id="16_jbj1t"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_tipki"]
 bounce = 0.5
@@ -106,8 +110,7 @@ sharp_limit = 10.0
 round_precision = 16
 
 [node name="targetBall" type="RigidBody2D" parent="." node_paths=PackedStringArray("cam", "ui")]
-visible = false
-position = Vector2(830, 0)
+position = Vector2(830, 57)
 mass = 99999.0
 gravity_scale = 0.0
 script = ExtResource("4_o6xl0")
@@ -177,7 +180,7 @@ scale = Vector2(0.063, 0.063)
 texture = ExtResource("2_jyhfs")
 
 [node name="upgradeBall" type="RigidBody2D" parent="." node_paths=PackedStringArray("targetBall")]
-position = Vector2(1000, 3)
+position = Vector2(1000, 60)
 mass = 99999.0
 gravity_scale = 0.0
 script = ExtResource("6_eb6dy")
@@ -287,7 +290,7 @@ position = Vector2(75, 96.5)
 scale = Vector2(1.34, 1.34)
 texture = ExtResource("10_trceg")
 
-[node name="ui" type="CanvasLayer" parent="." node_paths=PackedStringArray("maintarget", "upgradeBall", "statsLabel", "cam", "path", "bginthisscene")]
+[node name="ui" type="CanvasLayer" parent="." node_paths=PackedStringArray("maintarget", "upgradeBall", "statsLabel", "cam", "path", "bginthisscene", "pausemenu")]
 script = ExtResource("9_choun")
 maintarget = NodePath("../targetBall")
 upgradeBall = NodePath("../upgradeBall")
@@ -295,6 +298,7 @@ statsLabel = NodePath("../statsLabel")
 cam = NodePath("../cam")
 path = NodePath("../shooter/path")
 bginthisscene = NodePath("../bg")
+pausemenu = NodePath("../pausemenu")
 
 [node name="scoreText" type="Label" parent="ui"]
 offset_left = 8.0
@@ -358,6 +362,115 @@ vertical_alignment = 1
 
 [node name="bg" parent="." instance=ExtResource("12_eb6dy")]
 
+[node name="pausemenu" type="CanvasLayer" parent="."]
+process_mode = 3
+visible = false
+script = ExtResource("14_a8y0u")
+
+[node name="menuRoot" type="Control" parent="pausemenu"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="pauserect" type="ColorRect" parent="pausemenu/menuRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.58431375)
+
+[node name="resume" type="Button" parent="pausemenu/menuRoot"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -86.0
+offset_top = 50.0
+offset_right = 86.0
+offset_bottom = 87.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_85g3d")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = ExtResource("15_muem4")
+text = "Resume"
+
+[node name="ps4iconX" type="Sprite2D" parent="pausemenu/menuRoot/resume"]
+visible = false
+position = Vector2(191, 19)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("15_jkv2x")
+
+[node name="quit" type="Button" parent="pausemenu/menuRoot"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -54.0
+offset_top = 132.0
+offset_right = 54.0
+offset_bottom = 169.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_85g3d")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = ExtResource("15_muem4")
+text = "Quit"
+
+[node name="ps4iconX" type="Sprite2D" parent="pausemenu/menuRoot/quit"]
+visible = false
+position = Vector2(126, 18.5)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("15_jkv2x")
+
+[node name="paused" type="Label" parent="pausemenu/menuRoot"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -389.0
+offset_top = -205.0
+offset_right = 389.0
+offset_bottom = -112.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_85g3d")
+theme_override_font_sizes/font_size = 103
+text = "Paused"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("16_jbj1t")
+
+[node name="vtext" type="Label" parent="pausemenu/menuRoot"]
+modulate = Color(1, 1, 1, 0.59607846)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = -224.0
+offset_right = 258.0
+offset_bottom = -7.0
+grow_vertical = 0
+mouse_filter = 0
+theme_override_fonts/font = ExtResource("9_85g3d")
+theme_override_font_sizes/font_size = 12
+text = "v0.??"
+vertical_alignment = 2
+
 [connection signal="body_entered" from="targetBall/hitarea" to="targetBall" method="_on_hitarea_body_entered"]
 [connection signal="body_entered" from="upgradeBall/hitarea" to="upgradeBall" method="_on_hitarea_body_entered"]
 [connection signal="body_entered" from="kill" to="shooter" method="_on_kill_body_entered"]
+[connection signal="pressed" from="pausemenu/menuRoot/resume" to="pausemenu" method="_on_resume_pressed"]
+[connection signal="pressed" from="pausemenu/menuRoot/quit" to="ui" method="_on_quit_pressed"]

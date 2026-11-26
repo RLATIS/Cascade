@@ -25,6 +25,9 @@ var rng = RandomNumberGenerator.new()
 func _ready() -> void:
 	if isMain:
 		rng.seed = Globals.seed + 2
+		
+		await get_tree().process_frame
+		position = Vector2(10000,10000)
 	
 func spawn(clones):
 	if isMain:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cjnxsyfpslufq"]
+[gd_scene load_steps=11 format=3 uid="uid://cjnxsyfpslufq"]
 
 [ext_resource type="PackedScene" uid="uid://bb4vriqs8koif" path="res://scenes/effects.tscn" id="1_con2f"]
 [ext_resource type="PackedScene" uid="uid://e3lkvta0rwwl" path="res://scenes/bg.tscn" id="1_yqeox"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dnkvfgx3jm2lh" path="res://scripts/movearound.gd" id="4_13sgg"]
 [ext_resource type="Texture2D" uid="uid://dwut8j5b8k6b2" path="res://textures/PS4_ICON18.png" id="5_g3eks"]
 [ext_resource type="Script" uid="uid://boulo28mwkp2s" path="res://scripts/playmenu.gd" id="6_g3eks"]
+[ext_resource type="StyleBox" uid="uid://bnapb8o0hwfyo" path="res://scenes/styleboxoutline.tres" id="6_i6lef"]
 [ext_resource type="Script" uid="uid://c7eash3p64cpr" path="res://scripts/jackpotfinder.gd" id="7_v86rl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ytvr"]
@@ -63,7 +64,7 @@ grow_vertical = 0
 mouse_filter = 0
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 12
-text = "v0.65 | Hover here for credits..."
+text = "v0.?? | Hover here for credits..."
 vertical_alignment = 2
 
 [node name="creditpanel" type="Panel" parent="title"]
@@ -99,11 +100,12 @@ Font:
 fontspace.com
 (Pixelated Elegance)"
 
-[node name="uimenu1" type="CanvasLayer" parent="." node_paths=PackedStringArray("bginthisscene", "playmenu", "creditpanel", "lastseed")]
+[node name="uimenu1" type="CanvasLayer" parent="." node_paths=PackedStringArray("bginthisscene", "playmenu", "creditpanel", "credittext", "lastseed")]
 script = ExtResource("3_4ytvr")
 bginthisscene = NodePath("../bg")
 playmenu = NodePath("../playmenu")
 creditpanel = NodePath("../title/creditpanel")
+credittext = NodePath("../title/credittext")
 lastseed = NodePath("../playmenu/lastseed")
 
 [node name="play" type="Button" parent="uimenu1"]
@@ -120,6 +122,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = ExtResource("6_i6lef")
 text = "Play"
 
 [node name="ps4iconX" type="Sprite2D" parent="uimenu1/play"]
@@ -142,6 +145,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = ExtResource("6_i6lef")
 text = "Exit"
 
 [node name="ps4iconX" type="Sprite2D" parent="uimenu1/exit"]
@@ -186,6 +190,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = ExtResource("6_i6lef")
 text = "Easy"
 
 [node name="ps4iconX" type="Sprite2D" parent="playmenu/easy"]
@@ -208,6 +213,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = ExtResource("6_i6lef")
 text = "Medium"
 
 [node name="ps4iconX" type="Sprite2D" parent="playmenu/medium"]
@@ -230,6 +236,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = ExtResource("6_i6lef")
 text = "Hard"
 
 [node name="ps4iconX" type="Sprite2D" parent="playmenu/hard"]
@@ -251,6 +258,7 @@ offset_bottom = 34.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_mhnvy")
+theme_override_styles/focus = ExtResource("6_i6lef")
 text = "1234567"
 placeholder_text = "Seed..."
 alignment = 1
@@ -270,6 +278,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = ExtResource("6_i6lef")
 text = "Begin"
 
 [node name="ps4iconX" type="Sprite2D" parent="playmenu/begin"]

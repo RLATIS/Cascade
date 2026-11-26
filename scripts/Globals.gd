@@ -2,6 +2,7 @@ extends Node2D
 
 # CHANGEABLE VARIABLES 
 
+var version := 0.66
 var initclones := 7
 var initcooldownspeed = 0.7
 var initroundlength := 10.0
@@ -95,7 +96,7 @@ func updateStats():
 	targets = initclones
 	cooldownspeed = initcooldownspeed
 	roundlength = initroundlength
-	scorePerTarget = 1000000000000000000000.0
+	scorePerTarget = 1.0
 
 	for up in ownedUpgrades:
 		if up == '+1 Target':

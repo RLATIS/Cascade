@@ -3,12 +3,15 @@ extends CanvasLayer
 @export var bginthisscene : CanvasLayer
 @export var playmenu : CanvasLayer
 @export var creditpanel : Panel
+@export var credittext : Label
 @export var lastseed : Label
 
 var usingcontroller := false
 var credittween: Tween
 
 func _ready() -> void:
+	credittext.text = 'v' + str(Globals.version) + ' | Hover here for credits...'
+	
 	usingcontroller = Globals.onController
 	
 	for c in get_children():

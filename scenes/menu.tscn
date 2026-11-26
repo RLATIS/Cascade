@@ -63,11 +63,10 @@ grow_vertical = 0
 mouse_filter = 0
 theme_override_fonts/font = ExtResource("3_mhnvy")
 theme_override_font_sizes/font_size = 12
-text = "v0.6 | Hover here for credits..."
+text = "v0.65 | Hover here for credits..."
 vertical_alignment = 2
 
 [node name="creditpanel" type="Panel" parent="title"]
-visible = false
 offset_left = 8.0
 offset_top = 423.0
 offset_right = 208.0
@@ -94,6 +93,7 @@ Shaders:
 https://godotshaders.com
 jecovier
 VEGAMETA
+Exuin
 
 Font:
 fontspace.com

@@ -20,50 +20,43 @@ var isMain := true
 var rng = RandomNumberGenerator.new()
 
 func _ready() -> void:
-	if isMain:
-		rng.seed = Globals.seed + 3
-		
 	hitTrauma = targetBall.hitTrauma
 	cam = targetBall.cam
 	ui = targetBall.ui
 	
-	if not isMain:
-		# total weight of all upgrades
-		var totalWeight := 0
-		for upgradename in Globals.upgrades.keys():
-			totalWeight += Globals.upgrades[upgradename].weight
+	if isMain:
+		rng.seed = Globals.seed + 3
+	else:
+		var allgrades: Dictionary = Globals.upgrades.duplicate()
 		
-		# random number between 0 and totalWeight
-		var randomvalue := rng.randi_range(0, totalWeight)
+		if 'Cheapskate (Freeze shop tax)' in Globals.ownedUpgrades:
+			allgrades.erase('Cheapskate (Freeze shop tax)')
+		
+		var totalWeight := 0
+		for upgradeName in allgrades.keys():
+			totalWeight += allgrades[upgradeName].weight
+			
+		var randomvalue := rng.randi_range(0, totalWeight - 1)
 		var currentWeight := 0
 		var weight := 0
 		
-		var allgrades = Globals.upgrades
-		
-		if 'Cheapskate (Freeze shop tax)' in Globals.ownedUpgrades: # prevent duplicates
-			allgrades.erase('Cheapskate (Freeze shop tax)') # dict
-		
-		var u = allgrades.keys()
-		
-		for upgradeName in u:
+		for upgradeName in allgrades.keys():
 			currentWeight += allgrades[upgradeName].weight
 			if randomvalue < currentWeight:
 				upgrade = upgradeName
 				weight = allgrades[upgradeName].weight
 				cost = allgrades[upgradeName].cost
 				break
-		
+				
 		cost = round(cost)
-		
-		if weight <= 7:
-			upgradeLabel.modulate = Color('48c1ff')
-
-		if weight <= 4:
-			upgradeLabel.modulate = Color("ff7ce2ff")
 		
 		if weight <= 1:
 			upgradeLabel.modulate = Color('ff8d00')
-
+		elif weight <= 4:
+			upgradeLabel.modulate = Color("ff7ce2ff")
+		elif weight <= 7:
+			upgradeLabel.modulate = Color('48c1ff')
+			
 		upgradeLabel.text = upgrade
 		costLabel.text = '$' + str(cost)
 	

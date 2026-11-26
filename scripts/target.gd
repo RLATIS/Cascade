@@ -13,8 +13,12 @@ extends RigidBody2D
 @export var ui : CanvasLayer
 @export var bg: ColorRect
 
+@onready var TEXTURErainbow = $rainbowSprite
+@onready var TEXTUREplain = $ballSprite
+
 var shouldteleport := true
 var isMain := true
+var isRainbow := false
 
 var rng = RandomNumberGenerator.new()
 
@@ -37,21 +41,41 @@ func spawn(clones):
 			print('no clones!!')
 			
 func hit():
-	#print(self.name, ' was hit')
-	
-	Globals.playsound('res://sounds/explosion.wav', rng.randf_range(0.7, 1.4), rng.randf_range(-3, -0.5))
-	Globals.score += Globals.scorePerTarget
-	
-	ui.updateLabels()
-	
+	#print(self.name, ' was hit')	
 	particlespawn()
+
+	if not isRainbow:
+		Globals.playsound('res://sounds/explosion.wav', rng.randf_range(0.7, 1.4), rng.randf_range(-3, -0.5))
+		
+		Globals.score += Globals.scorePerTarget
+		
+		if randf() <= 0.0066666666: # 1 in 150
+			isRainbow = true
+		else:
+			isRainbow = false
+			
+	else: # just hit a rainbow
+		isRainbow = false
+		Globals.playsound('res://sounds/explosion.wav', rng.randf_range(0.7, 1.4), rng.randf_range(-3.7, -3.0))
+		Globals.playsound('res://sounds/rainbow.wav', rng.randf_range(0.8, 1.2), rng.randf_range(-0.5, 0.25))
+		
+		Globals.score += Globals.scorePerTarget * 50
+		
+	ui.updateLabels()
+		
+	TEXTURErainbow.visible = isRainbow
+	TEXTUREplain.visible = not isRainbow
 
 	cam.trauma += hitTrauma
 
 	shouldteleport = true
 
 func particlespawn():
-	var p = particle.duplicate()
+	var p : CPUParticles2D = particle.duplicate()
+	
+	if isRainbow:
+		p = $rainbowpart.duplicate()
+		
 	get_parent().add_child(p)
 	p.global_position = self.global_position
 	p.emitting = true

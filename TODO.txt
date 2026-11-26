@@ -20,5 +20,6 @@ Done:
 Used resources:
 	Chromatic Aberation: https://godotshaders.com/shader/just-chromatic-aberration/
 	Bloom: https://godotshaders.com/shader/bloom/
+	Rainbow: https://godotshaders.com/shader/moving-rainbow-gradient/
 	
 	Font: https://www.fontspace.com/pixelated-elegance-font-f126145

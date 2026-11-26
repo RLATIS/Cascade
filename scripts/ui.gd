@@ -14,7 +14,10 @@ extends CanvasLayer
 @onready var roundLabel : Label = $roundLabel
 
 var triggeredyet := false
-var scoredSoFarMoney := 0
+
+var lastScoreCheckedForMoney := 0.0
+var moneyScoreRemainder := 0.0
+
 var exiting := false
 
 var beatenquotatrigger := false
@@ -47,16 +50,20 @@ func _process(delta: float) -> void:
 	if timerBar.value > 0:
 		timerBar.value -= (100.0 / Globals.roundlength) * delta
 		
-		var scoreDiff = Globals.score - scoredSoFarMoney # thing to add money on the go
-		var scoreNeededForMoney = scorePerMoney * Globals.scorePerTarget
+		var scoreDiff: float = Globals.score - lastScoreCheckedForMoney
+		lastScoreCheckedForMoney = Globals.score
 
-		if scoreDiff >= scoreNeededForMoney:
-			var moneyEarned = floor(scoreDiff / scoreNeededForMoney)
-			Globals.money += int(moneyEarned)
-			scoredSoFarMoney += int(moneyEarned * scoreNeededForMoney)
-			
-			Globals.playsound('res://sounds/coin.wav', randf_range(0.9, 1.2), randf_range(-1.0, -0.25))
-			updateLabels()
+		if scoreDiff > 0.0 and Globals.scorePerTarget > 0.0:
+			moneyScoreRemainder += scoreDiff / Globals.scorePerTarget
+
+			var moneyEarned := floori(moneyScoreRemainder / scorePerMoney)
+
+			if moneyEarned > 0:
+				Globals.money += moneyEarned + (Globals.scorePerTarget / 500_000_000_000_000_000_000.0) # wow you can put underscores and easier to read
+				moneyScoreRemainder -= moneyEarned * scorePerMoney
+
+				Globals.playsound('res://sounds/coin.wav', randf_range(0.9, 1.2), randf_range(-1.0, -0.25))
+				updateLabels()
 			
 		if not beatenquotatrigger:
 			if Globals.score >= Globals.quota:
@@ -197,7 +204,8 @@ func restartround():
 	maintarget.shouldteleport = true
 	
 	Globals.score = 0
-	scoredSoFarMoney = 0
+	lastScoreCheckedForMoney = 0.0
+	moneyScoreRemainder = 0.0
 	updateLabels()
 	
 	triggeredyet = false

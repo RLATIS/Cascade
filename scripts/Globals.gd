@@ -41,7 +41,7 @@ var upgradesinit := {
 	'Greed (+1x SPT for each $6 held)': { 'cost': 5, 'weight': 4.5 },
 	
 	# BUILD PAYOFFS
-	'Overheat (x6 Score if cooldown <= 0.35s)': { 'cost': 4, 'weight': 5 },
+	'Overheat (x5 Score if cooldown <= 0.4s)': { 'cost': 4, 'weight': 5 },
 	'Lonely (x7 Score if Targets <= 4)': { 'cost': 5, 'weight': 5 },
 	'Swarm (+1x SPT for each target)': { 'cost': 4, 'weight': 5 },
 	'Sniper (x7 Score if cooldown >= 1.0s)': { 'cost': 5, 'weight': 5},
@@ -95,7 +95,7 @@ func updateStats():
 	targets = initclones
 	cooldownspeed = initcooldownspeed
 	roundlength = initroundlength
-	scorePerTarget = 1.0
+	scorePerTarget = 1000000000000000000000.0
 
 	for up in ownedUpgrades:
 		if up == '+1 Target':
@@ -154,9 +154,9 @@ func updateStats():
 	
 	# OTHER ONES (Multiply)
 	for up in ownedUpgrades:
-		if up == 'Overheat (x6 Score if cooldown <= 0.35s)':
-			if cooldownspeed <= 0.35:
-				scorePerTarget *= 6
+		if up == 'Overheat (x5 Score if cooldown <= 0.4s)':
+			if cooldownspeed <= 0.4:
+				scorePerTarget *= 5
 		elif up.begins_with('Sniper'):
 			if cooldownspeed >= 1.0:
 				scorePerTarget *= 7

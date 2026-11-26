@@ -15,6 +15,8 @@ extends CanvasLayer
 
 @export var pausemenu : CanvasLayer
 
+@export var vignette : ColorRect
+
 var exiting := false
 
 var triggeredyet := false
@@ -53,6 +55,11 @@ func updateLabels(eq:=false):
 func _process(delta: float) -> void:
 	if timerBar.value > 0 and not LEAVINGGAME:
 		timerBar.value -= (100.0 / Globals.roundlength) * delta
+		
+		if timerBar.value <= 15 and not triggeredyet:
+			if Globals.score < Globals.quota:
+				var targetAlpha: float = clampf(1.0 - (timerBar.value / 15.0), 0.0, 1.0)
+				vignette.material.set_shader_parameter('alpha', targetAlpha)
 		
 		var scoreDiff: float = Globals.score - lastScoreCheckedForMoney
 		lastScoreCheckedForMoney = Globals.score
@@ -94,10 +101,14 @@ func _process(delta: float) -> void:
 		
 		Globals.canshoot = false
 		
+		var fadeOutVig = create_tween()
+		fadeOutVig.tween_property(vignette.material, "shader_parameter/alpha", 0.0, 0.3)
+		
 		await waitfornobullets()
 		
 		if Globals.score >= Globals.quota: # win!!
 			Globals.playsound('res://sounds/shop.wav', randf_range(0.9, 1.1), randf_range(3.0, 5.0))
+			
 			
 			cam.trauma += 0.8
 			

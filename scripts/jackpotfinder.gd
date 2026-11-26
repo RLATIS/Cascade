@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 # HOW TO USE:
 # SET CALC TO TRUE
@@ -10,58 +10,59 @@ extends Node
 @export var find1 := 'Jackpot'
 @export var find2 := 'Greed'
 
-# 1505908 : 2 Jackpot, 1 Greed
+var hasCheapskate := false
 
 func _ready():
 	if calc:
-		var found2 := false
+		var found2and1 := false
 		var found3 := false
-		var found2greed := false
+		var found3again := false
+
+		var allgrades: Dictionary = Globals.upgradesinit.duplicate()
+		if hasCheapskate:
+			allgrades.erase('Cheapskate (Freeze shop tax)')
 
 		var totalWeight := 0
-		var jackpotStart := 0
-		var greedStart := 0
-		var greedWeight := 0
+		for upgradeName in allgrades.keys():
+			totalWeight += allgrades[upgradeName].weight
 
-		for up in Globals.upgradesinit:
-			var weight = Globals.upgradesinit[up].weight
-			if up.begins_with(find1):
-				jackpotStart = totalWeight
-			if up.begins_with(find2):
-				greedStart = totalWeight
-				greedWeight = weight
-			totalWeight += weight
-
-		var rngs = []
-		for i in range(3):
-			rngs.append(RandomNumberGenerator.new())
+		var rng = RandomNumberGenerator.new()
 
 		for s in range(10000000):
-			var jackpots := 0
-			var hasGreed := false
+			var count1 := 0
+			var count2 := 0
 
 			for i in range(3):
-				rngs[i].seed = s + 1000 + i * 10
-				var value = rngs[i].randi_range(0, totalWeight)
+				rng.seed = s + 1000 + i * 10
+				var randomvalue := rng.randi_range(0, totalWeight - 1)
+				var currentWeight := 0
 
-				if value >= greedStart and value < greedStart + greedWeight:
-					hasGreed = true
+				for upgradeName in allgrades.keys():
+					currentWeight += allgrades[upgradeName].weight
+					if randomvalue < currentWeight:
+						if upgradeName.begins_with(find1):
+							count1 += 1
+						elif upgradeName.begins_with(find2):
+							count2 += 1
+						break
 
-				if value >= jackpotStart and value < jackpotStart + 1:
-					jackpots += 1
+			if count1 == 2 and count2 == 1:
+				found2and1 = true
+				print('2 ', find1, ' + 1 ', find2, ' : ', s)
 
-			if jackpots == 2:
-				print('2 ', find1, ' : ', s)
+			if count1 == 1 and count2 == 2:
+				found2and1 = true
+				print('2 ', find2, ' + 1 ', find1, ' : ', s)
 
-			if jackpots == 2 and hasGreed:
-				found2greed = true
-				print('2 ', find1, ' + ', find2, ' : ',  s)
-
-			if jackpots == 3:
+			if count1 == 3:
 				found3 = true
-				print('3 ' + find1, '!!!!!!!!!!!!!!!!!!!!!!!!!: ', s)
+				print('3 ', find1, ' : ', s)
 
-			if found2greed and found3:
+			if count2 == 3:
+				found3again = true
+				print('3 ', find2, ' : ', s)
+
+			if found2and1 and found3 and found3again:
 				break
 
 		print('DONE')

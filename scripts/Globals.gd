@@ -2,7 +2,7 @@ extends Node2D
 
 # CHANGEABLE VARIABLES 
 
-var version := 0.665
+var version := 0.7
 var initclones := 7
 var initcooldownspeed = 0.7
 var initroundlength := 10.0
@@ -39,7 +39,10 @@ var upgradesinit := {
 	'+3 Score Per Target': { 'cost': 3, 'weight': 8.7},
 	
 	'Coin Flip (x4 or ÷2 Score Per Target)': { 'cost': 4, 'weight': 6 },
+	
+	# OP everyone going for these
 	'Greed (+1x SPT for each $6 held)': { 'cost': 5, 'weight': 4.5 },
+	'Big Spender (x1.5 SPT for every 2 upgrades)': { 'cost': 5, 'weight': 4.5 },
 	
 	# BUILD PAYOFFS
 	'Overheat (x5 Score if cooldown <= 0.4s)': { 'cost': 4, 'weight': 5 },
@@ -174,28 +177,38 @@ func updateStats():
 			scorePerTarget *= 2
 		elif up == 'x5 Score Per Target':
 			scorePerTarget *= 5
+			
+		elif up.begins_with('Big Spender'):
+			scorePerTarget *= 1.5 * (len(ownedUpgrades) / 2)
 	
-	for up in ownedUpgrades.duplicate():
+	for up in ownedUpgrades: # once off
 		if up.begins_with("Coin Flip"):
 			var mult := 4.0 if rng.randf() < 0.5 else 0.5
-			mult = 0.5
+			
+			ownedUpgrades.append('mumu' + str(mult))
 			
 			if mult < 1: # under 1
 				playsound('res://sounds/bad.wav', rng.randf_range(0.9, 1.1), rng.randf_range(3.0, 5.0))
 			
 			scorePerTarget *= mult
+			
+			ownedUpgrades.erase(up)
+			 
+	for up in ownedUpgrades: # m ones
+		if up.begins_with('mumu'):
+			scorePerTarget *= float(up.replace('mumu', ''))
 	
-		
 	cooldownspeed = snappedf(cooldownspeed, 0.01)
 	money = snappedf(money, 0.01)
 
-	statsLabel.text = "Round length: {roundlength} secs\nTargets: {targets}\nShooting Cooldown: {cooldownspeed} secs\nScore Per Target: {spt}\nShop Tax: {t}% {tfrozen}\nPress 'E' to exit shop.".format({
+	statsLabel.text = "Round length: {roundlength} secs\nTargets: {targets}\nShooting Cooldown: {cooldownspeed} secs\nScore Per Target: {spt}\nShop Tax: {t}% {tfrozen}\nUpgrades: {u}\nPress 'E' to exit shop.".format({
 		"roundlength": formatcommas(roundlength),
 		"targets": formatcommas(targets+1),
 		"cooldownspeed": cooldownspeed,
 		'spt': formatcommas(scorePerTarget),
 		't': str(snappedf((tax * 100.0) - 100.0, 0.01)),
 		'tfrozen': (' (Frozen!)' if 'Cheapskate (Freeze shop tax)' in ownedUpgrades else ''),
+		'u': len(ownedUpgrades)
 	})
 
 func entershop(): # called upon enter shop

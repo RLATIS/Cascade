@@ -14,6 +14,8 @@ func _ready() -> void:
 	$menuRoot/resume.focus_neighbor_bottom = $menuRoot/quit.get_path()
 
 	$menuRoot/quit.focus_neighbor_top = $menuRoot/resume.get_path()
+	
+	$menuRoot/seed.text = 'Seed: ' + str(Globals.seed)
 
 func upd() -> void:
 	if t:

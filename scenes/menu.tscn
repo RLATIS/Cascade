@@ -453,6 +453,8 @@ vertical_alignment = 2
 
 [node name="seedcracker" type="Node2D" parent="."]
 script = ExtResource("7_v86rl")
+find1 = "Interest"
+find2 = "Jackpot"
 
 [connection signal="mouse_entered" from="title/credittext" to="uimenu1" method="credshow"]
 [connection signal="mouse_exited" from="title/credittext" to="uimenu1" method="credhide"]
